@@ -70,3 +70,5 @@ group :test do
   gem 'cucumber', '~> 8.0'
   gem 'database_cleaner'
 end
+
+gem "bcrypt", "~> 3.1"
