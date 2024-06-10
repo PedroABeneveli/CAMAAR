@@ -6,10 +6,11 @@ describe User, type: :model do
   end
 
   describe "logging in" do
+    user = FactoryBot.build(:user)
+
     it "should validate a password" do
-      @user = User.create(email: "alice@email.com", matricula: "1234", password: "pass123", tipo: "aluno", is_admin: false)
-      expect(@user.authenticate("passabc")).to be_falsy
-      expect(@user.authenticate("pass123")).to be_truthy
+      expect(user.authenticate("pass456")).to be_falsy
+      expect(user.authenticate("pass123")).to be_truthy
     end
   end
 end

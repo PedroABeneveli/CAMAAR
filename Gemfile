@@ -69,6 +69,9 @@ group :test do
   gem 'cucumber-rails', require: false
   gem 'cucumber', '~> 8.0'
   gem 'database_cleaner'
+  gem 'rails-controller-testing'
 end
 
 gem "bcrypt", "~> 3.1"
+
+gem "factory_bot_rails", "~> 6.4"
