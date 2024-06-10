@@ -41,10 +41,16 @@ gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+gem "bcrypt", "~> 3.1"
+
+gem "tailwindcss-rails", "~> 2.0.32"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  gem "factory_bot_rails", "~> 6.4"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
 end
@@ -71,7 +77,3 @@ group :test do
   gem 'database_cleaner'
   gem 'rails-controller-testing'
 end
-
-gem "bcrypt", "~> 3.1"
-
-gem "factory_bot_rails", "~> 6.4"
