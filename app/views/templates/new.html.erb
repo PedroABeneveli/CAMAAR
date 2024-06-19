@@ -1,0 +1,25 @@
+<!-- app/views/templates/new.html.erb -->
+<div class="flex flex-col gap-4 justify-center">
+    <div class="flex w-full justify-center">
+        <span class="text-2xl font-bold">Criar novo template</span>
+    </div>
+    <div>
+        <%= form_with(model: @template, url: templates_path, method: :post) do |form| %>
+            <div class="grid grid-cols-1 gap-4">
+                <div class="flex items-center gap-4">
+                    <%= form.label :name %>
+                    <%= form.text_field :name, class: 'form-control' %>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <%= form.label :content %>
+                    <%= form.text_area :content, class: 'form-control' %>
+                </div>
+
+                <div class="flex w-full justify-center">
+                    <%= form.submit 'Create Template', class: 'btn btn-primary' %>
+                </div>
+            </div>
+        <% end %>
+    </div>
+</div>

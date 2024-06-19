@@ -3,5 +3,7 @@ Rails.application.routes.draw do
 
   get '/avaliacoes', to: 'avaliacoes#index'
 
+  resources :templates
+
   root to: "home#index"
 end
