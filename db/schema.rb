@@ -10,10 +10,58 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_19_202833) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_20_144949) do
+  create_table "form_requests", force: :cascade do |t|
+    t.integer "study_class_id", null: false
+    t.integer "user_id", null: false
+    t.boolean "answered", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["study_class_id"], name: "index_form_requests_on_study_class_id"
+    t.index ["user_id"], name: "index_form_requests_on_user_id"
+  end
+
+  create_table "form_responses", force: :cascade do |t|
+    t.integer "study_class_id", null: false
+    t.integer "template_id", null: false
+    t.string "response"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["study_class_id"], name: "index_form_responses_on_study_class_id"
+    t.index ["template_id"], name: "index_form_responses_on_template_id"
+  end
+
+  create_table "study_classes", force: :cascade do |t|
+    t.string "code"
+    t.string "name"
+    t.string "classCode"
+    t.string "semester"
+    t.string "time"
+    t.integer "docente_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["docente_id"], name: "index_study_classes_on_docente_id"
+  end
+
+  create_table "study_classes_users", id: false, force: :cascade do |t|
+    t.integer "study_class_id", null: false
+    t.integer "user_id", null: false
+    t.index ["study_class_id"], name: "index_study_classes_users_on_study_class_id"
+    t.index ["user_id"], name: "index_study_classes_users_on_user_id"
+  end
+
+  create_table "template_questions", force: :cascade do |t|
+    t.string "title"
+    t.string "type"
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "template_id", null: false
+    t.index ["template_id"], name: "index_template_questions_on_template_id"
+  end
+
   create_table "templates", force: :cascade do |t|
     t.string "name"
-    t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -27,9 +75,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_19_202833) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "matricula", default: "", null: false
+    t.string "nome"
+    t.string "usuario"
+    t.string "formacao"
+    t.string "ocupacao"
+    t.string "curso"
+    t.string "departamento"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["matricula"], name: "index_users_on_matricula", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "form_requests", "study_classes"
+  add_foreign_key "form_requests", "users"
+  add_foreign_key "form_responses", "study_classes"
+  add_foreign_key "form_responses", "templates"
+  add_foreign_key "study_classes", "users", column: "docente_id"
+  add_foreign_key "template_questions", "templates"
 end

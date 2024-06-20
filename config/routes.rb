@@ -5,5 +5,8 @@ Rails.application.routes.draw do
 
   resources :templates
 
-  root to: "home#index"
+  get '/gerenciamento', to: 'gerenciamento#index'
+  put '/gerenciamento/import', :as => 'gerenciamento_import'
+
+  root to: "avaliacoes#index"
 end
