@@ -1,16 +1,23 @@
 class TemplatesController < ApplicationController
     before_action :set_template, except: [:index, :new, :create]
   
+    before_action :set_template, except: [:index, :new, :create]
+  
     def index 
       @templates = Template.all
+      @templates = Template.all
     end
+  
   
     def show
     end
   
+  
     def new
       @template = Template.new
+      @template = Template.new
     end
+  
   
     def create 
       @template = Template.new(template_params)
@@ -19,14 +26,22 @@ class TemplatesController < ApplicationController
       else
         render :new, status: :unprocessable_entity
       end
+      @template = Template.new(template_params)
+      if @template.save
+        redirect_to templates_path
+      else
+        render :new, status: :unprocessable_entity
+      end
     end
+  
   
     def edit
     end
   
+  
     def update 
       if @template.update(template_params)
-        redirect_to @template
+        redirect_to templates_path
       else
         render :edit, status: :unprocessable_entity
       end
@@ -34,7 +49,7 @@ class TemplatesController < ApplicationController
   
     def destroy 
       @template.destroy
-      redirect_to root_path   
+      redirect_to templates_path 
     end
   
     private
@@ -46,6 +61,6 @@ class TemplatesController < ApplicationController
     def set_template
       @template = Template.find(params[:id])
     rescue ActiveRecord::RecordNotFound
-      redirect_to root_path
+      redirect_to templates_path
     end
   end
