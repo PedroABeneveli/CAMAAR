@@ -1,23 +1,16 @@
 class TemplatesController < ApplicationController
     before_action :set_template, except: [:index, :new, :create]
   
-    before_action :set_template, except: [:index, :new, :create]
-  
     def index 
       @templates = Template.all
-      @templates = Template.all
     end
-  
   
     def show
     end
   
-  
     def new
       @template = Template.new
-      @template = Template.new
     end
-  
   
     def create 
       @template = Template.new(template_params)
@@ -34,10 +27,8 @@ class TemplatesController < ApplicationController
       end
     end
   
-  
     def edit
     end
-  
   
     def update 
       if @template.update(template_params)
