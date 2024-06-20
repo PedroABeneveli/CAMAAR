@@ -19,12 +19,6 @@ class TemplatesController < ApplicationController
       else
         render :new, status: :unprocessable_entity
       end
-      @template = Template.new(template_params)
-      if @template.save
-        redirect_to templates_path
-      else
-        render :new, status: :unprocessable_entity
-      end
     end
   
     def edit
@@ -46,7 +40,7 @@ class TemplatesController < ApplicationController
     private
   
     def template_params
-      params.require(:template).permit(:name, :content)
+      params.require(:template).permit(:name)
     end
   
     def set_template
