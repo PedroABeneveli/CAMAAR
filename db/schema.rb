@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_20_144949) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_20_201644) do
   create_table "form_requests", force: :cascade do |t|
     t.integer "study_class_id", null: false
     t.integer "user_id", null: false
@@ -52,7 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_20_144949) do
 
   create_table "template_questions", force: :cascade do |t|
     t.string "title"
-    t.string "type"
+    t.string "question_type"
     t.string "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
