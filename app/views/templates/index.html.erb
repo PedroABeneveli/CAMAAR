@@ -8,6 +8,6 @@
         <%= button_to 'Delete', template_path(template), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
       </div>
     <% end %>
-    <%= link_to 'Add', new_template_path, method: :post, class: 'btn' %>
+    <%= link_to 'Add', new_template_path, method: :get, class: 'btn' %>
   </div>
 </div>

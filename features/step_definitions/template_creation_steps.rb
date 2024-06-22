@@ -8,15 +8,15 @@ end
 
 # nao sei como eu faria pra 2 alternativas
 When /^I create a radio question with the question "(.*)" and 1 alternative: "(.*)"$/ do |pergunta, alt1|
-  steps %{When I press "Big +"}
-  steps %{And I select "Radio" from "Tipo"}
-  steps %{And I fill in "Texto:" with "#{pergunta}"}
-  steps %{And I fill in "Opções:" with "#{alt1}"}
+  steps %{When I press "+"}
+  steps %{And I select "Radio" from "Question Type"}
+  steps %{And I fill in "Title" with "#{pergunta}"}
+  steps %{And I fill in "Alternatives" with "#{alt1}"}
 end
 
 Given /^I have created a template "(.*)"$/ do |nome|
   steps %{Given I am on the Templates page}
-  steps %{When I press "+"}
+  steps %{When I follow "Add"}
   steps %{And I fill in "Nome do template:" with "#{nome}"}
   steps %{And I create a radio question with the question "radio?" and 1 alternative: "sim"}
   steps %{And I create a text question with the question "texto?"}
