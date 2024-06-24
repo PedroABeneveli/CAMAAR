@@ -28,6 +28,7 @@ class TemplatesController < ApplicationController
   end
 
   def edit
+    render layout: "home"
   end
 
   def update 
