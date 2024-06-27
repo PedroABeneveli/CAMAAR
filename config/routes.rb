@@ -5,16 +5,20 @@ Rails.application.routes.draw do
     resources :response, only: [:index, :create, :update, :destroy]
   end
 
-  resources :templates
+  scope :gerenciamento do
+    put 'import', :to => 'gerenciamento#import', :as => 'gerenciamento_import'
+
+    resources :resultados, only: [:index] do
+      member do
+        get :export, :as => "resultados_export"
+      end
+    end
+
+    resources :send_forms, only: [:index, :create]
+    resources :templates, only: [:index, :show, :new, :create, :edit, :update, :destroy]
+  end
 
   get '/gerenciamento', to: 'gerenciamento#index'
-  put '/gerenciamento/import', :as => 'gerenciamento_import'
-
-  get '/gerenciamento/resultados', :to => 'resultados#index'
-  get '/gerenciamento/resultados/:id/export', :to => 'resultados#export', :as => "resultados_export"
-
-  get '/gerenciamento/send_forms', :to => 'send_forms#index'
-  post '/gerenciamento/send_forms', :to => 'send_forms#create'
 
   root to: "avaliacoes#index"
 end
