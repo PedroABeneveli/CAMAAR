@@ -6,13 +6,13 @@
     <%= form_with(model: @template, url: template_path(@template), method: :patch, local: true) do |form| %>
       <div class="grid grid-cols-1 gap-4">
         <div class="flex items-center gap-4">
-          <%= form.label :name %>
+          <%= form.label :name, "Nome do template:" %>
           <%= form.text_field :name, class: 'form-control' %>
         </div>
 
         <div id="questions">
           <%= form.fields_for :template_questions do |question_form| %>
-            <div class="bg-white rounded-md p-4 question-fields">
+            <div class="bg-white rounded-md p-4 question-fields" data-question-index="<%= question_form.index %>">
               <div class="grid grid-cols-1 gap-4">
                 <div class="flex items-center gap-4">
                   <%= question_form.label :title, "Title", for: "template_template_questions_attributes_#{question_form.index}_title" %>
@@ -29,17 +29,17 @@
                   <div class="alternatives-list" data-role="alternatives-list">
                     <% if ['radio', 'checkbox'].include?(question_form.object.question_type) %>
                       <% begin
-                           alternatives_hash = JSON.parse(question_form.object.alternatives)
-                           alternatives_hash.each_with_index do |(alt_index, alt), index| %>
-                        <div class="flex items-center gap-4 alternative-field">
-                          <%= question_form.label "template_questions_attributes_#{question_form.index}_alternatives_#{alt_index}_content", "Alternative" %>
-                          <%= question_form.text_field :alternatives, name: "template[template_questions_attributes][#{question_form.index}][alternatives][#{alt_index}][content]", id: "template_template_questions_attributes_#{question_form.index}_alternatives_#{alt_index}_content", value: alt["content"], class: 'form-control alternative-input' %>
-                        </div>
-                      <% end
-                      rescue JSON::ParserError
-                        # Handle the case where alternatives are not in valid JSON format
-                        # This can be handled with appropriate fallback logic or error handling
-                      end %>
+                          json_string = question_form.object.alternatives.gsub('=>', ':')
+                          alternatives_hash = JSON.parse(json_string)
+                          alternatives_hash.each do |index, alt| %>
+                            <div class="flex items-center gap-4 alternative-field">
+                              <%= question_form.label "template_questions_attributes_#{question_form.index}_alternatives_#{index}_content", "Alternative" %>
+                              <%= question_form.text_field :alternatives, name: "template[template_questions_attributes][#{question_form.index}][alternatives][#{index}][content]", id: "template_template_questions_attributes_#{question_form.index}_alternatives_#{index}_content", value: alt["content"], class: 'form-control alternative-input' %>
+                            </div>
+                      <% end  
+                      rescue JSON::ParserError => e %>
+                        <p>JSON parsing error: <%= e.message %></p>
+                      <% end %>
                     <% end %>
                   </div>
                 </div>
