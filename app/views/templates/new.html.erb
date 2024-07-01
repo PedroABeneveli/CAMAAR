@@ -9,7 +9,7 @@
           </div>
 
           <div id="questions">
-            <% @questions.each do |question| %>
+            <% @template.template_questions.each do |question| %>
               <%= render :partial => "question", :locals => { question: question } %>
             <% end %>
             <div class="alternatives-container hidden" data-role="alternatives-container">

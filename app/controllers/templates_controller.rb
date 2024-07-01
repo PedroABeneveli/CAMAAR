@@ -1,7 +1,7 @@
 class TemplatesController < ApplicationController
   before_action :set_template, except: [:index, :new, :create]
 
-  def index 
+  def index
     @templates = Template.all
 
     render layout: "home"
@@ -12,12 +12,12 @@ class TemplatesController < ApplicationController
 
   def new
     @template = Template.new
-    @template.template_questions.build
+    # @template.template_questions.build
 
     render layout: "home"
   end
 
-  def create 
+  def create
     process_alternatives
     @template = Template.new(template_params)
     if @template.save
@@ -31,7 +31,7 @@ class TemplatesController < ApplicationController
     render layout: "home"
   end
 
-  def update 
+  def update
     process_alternatives
     if @template.update(template_params)
       redirect_to templates_path
@@ -40,16 +40,16 @@ class TemplatesController < ApplicationController
     end
   end
 
-  def destroy 
+  def destroy
     @template.destroy
-    redirect_to templates_path, notice: 'Template was successfully deleted.'    
+    redirect_to templates_path, notice: 'Template was successfully deleted.'
   end
 
   private
 
   def template_params
     params.require(:template).permit(
-      :name, 
+      :name,
       template_questions_attributes: [:id, :title, :question_type, :content, :_destroy, alternatives: [:content]]
     )
   end
@@ -62,12 +62,12 @@ class TemplatesController < ApplicationController
 
   def process_alternatives
     return unless params[:template][:template_questions_attributes]
-  
+
     params[:template][:template_questions_attributes].each do |key, question|
       if question[:question_type] == 'radio' || question[:question_type] == 'checkbox'
         if question[:alternatives].present?
           alternatives = []
-          question[:alternatives].each do |key, alt| 
+          question[:alternatives].each do |key, alt|
             alternatives << alt[:content]
           end
           question[:content] = alternatives.to_json
@@ -79,5 +79,5 @@ class TemplatesController < ApplicationController
       end
     end
   end
-  
+
 end
