@@ -13,6 +13,11 @@ RSpec.describe TemplatesController, type: :controller do
       get :index
     end
 
+    it "gets all templates on index" do
+      expect(Template).to receive(:all)
+      get :index
+    end
+
     it "calls the model to create a new template" do
       expect(Template).to receive(:new)
       get :new

@@ -12,7 +12,6 @@ class TemplatesController < ApplicationController
 
   def new
     @template = Template.new
-    # @template.template_questions.build
 
     render layout: "home"
   end
