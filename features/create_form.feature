@@ -4,14 +4,14 @@ Feature: create a class evaluation form
     So that I can evaluate classes' performances in the current semester
 
     Background: Starting on the gerenciamento page
-        Given a template "Template1" has been created
+        Given I have created a template "Template1"
         And I am on the Gerenciamento page
         When I press "Enviar Formulários"
         Then I should see "Selecione o template"
 
     Scenario: Sending a form to a class successfully (happy path)
-        When I select template "Template1"
-        And when I select class "Turma1"
+        When I select "Template1" from "Selecione o template"
+        And I check "Turma1"
         And I press "Enviar"
         Then I should see "Formulário enviado com sucesso"
 

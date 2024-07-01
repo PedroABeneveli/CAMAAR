@@ -17,7 +17,7 @@
           </div>
 
           <div class="flex w-full justify-center">
-            <%= form.submit 'Create Template', class: 'btn text-center px-8 py-4 hover:cursor-pointer hover:opacity-75 text-2xl text-white font-semibold rounded-lg bg-[#6C2365]' %>
+            <%= form.submit 'Criar Template', class: 'btn text-center px-8 py-4 hover:cursor-pointer hover:opacity-75 text-2xl text-white font-semibold rounded-lg bg-[#6C2365]' %>
           </div>
         </div>
       <% end %>
@@ -34,12 +34,13 @@
       <div class="bg-white rounded-md p-4 question-fields" data-question-index="${newQuestionIndex}">
         <div class="grid grid-cols-1 gap-4">
           <div class="flex items-center gap-4">
-            <label for="template_template_questions_attributes_${newQuestionIndex}_title">Title</label>
+            <label for="template_template_questions_attributes_${newQuestionIndex}_title">Título</label>
             <input type="text" name="template[template_questions_attributes][${newQuestionIndex}][title]" id="template_template_questions_attributes_${newQuestionIndex}_title" class="form-control">
           </div>
           <div class="flex items-center gap-4">
-            <label for="template_template_questions_attributes_${newQuestionIndex}_question_type">Question Type</label>
+            <label for="template_template_questions_attributes_${newQuestionIndex}_question_type">Tipo de questão</label>
             <select name="template[template_questions_attributes][${newQuestionIndex}][question_type]" id="template_template_questions_attributes_${newQuestionIndex}_question_type" class="form-control" data-role="type-select">
+              <option value=""></option>
               <option value="text">Text</option>
               <option value="radio">Radio</option>
               <option value="checkbox">Checkbox</option>
@@ -47,7 +48,7 @@
           </div>
           <div class="alternatives-container hidden" data-role="alternatives-container">
             <div class="flex items-center gap-4">
-              <button type="button" class="btn btn-secondary" data-role="add-alternative">Add Alternative</button>
+              <button type="button" class="btn btn-secondary" data-role="add-alternative">Adicionar Alternativa</button>
             </div>
             <div class="alternatives-list" data-role="alternatives-list">
             </div>
@@ -79,7 +80,7 @@
         var questionIndex = questionFields.getAttribute('data-question-index');
         var newAlternativeFields = `
         <div class="flex items-center gap-4 alternative-field">
-          <label for="alternative_${questionIndex}_${newAlternativeIndex}">Alternative</label>
+          <label for="alternative_${questionIndex}_${newAlternativeIndex}">Alternativa</label>
           <input type="text" class="form-control alternative-input" name="template[template_questions_attributes][${questionIndex}][alternatives][${newAlternativeIndex}][content]">
         </div>`;
         alternativesList.insertAdjacentHTML('beforeend', newAlternativeFields);

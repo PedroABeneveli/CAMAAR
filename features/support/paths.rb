@@ -26,7 +26,7 @@ module NavigationHelpers
       '/gerenciamento/resultados'
 
     when /^the Templates\s?page$/
-      '/gerenciamento/templates'
+      '/templates'
 
     when /^the Definir Senha\s?page$/
       "/users/password/edit?reset_password_token=#{@token}"

@@ -6,11 +6,11 @@ Feature: Create form template
   # tem que ver os labels dos botoes tbm
   Background: Starting on the gerenciamento page
     Given I am on the Templates page
-    When I press "+"
+    When I follow "Add"
     Then I should see "Nome do template"
 
   Scenario: Not filling a field (sad path)
-    When I press "Criar"
+    When I press "Criar Template"
     Then I should be on the Templates page
     And I should see "Erro: campos nao preenchidos"
 
