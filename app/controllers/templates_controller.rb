@@ -13,7 +13,7 @@ class TemplatesController < ApplicationController
 
   def new
     @template = Template.new
-    render layout: "home"
+    render "templates/show", layout: "home"
   end
 
   def create
