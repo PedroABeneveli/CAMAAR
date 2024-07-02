@@ -36,6 +36,14 @@ RSpec.describe TemplatesController, type: :controller do
       it "should have an question_add method" do
         expect(controller).to respond_to(:question_add)
       end
+
+      it "should have a redirect to question_add method" do
+        expect(put: '/gerenciamento/templates/13/question_add').to route_to(
+                                                                     controller: 'templates',
+                                                                     action: 'question_add',
+                                                                     id: '13'
+                                                                   )
+      end
     end
   end
 
