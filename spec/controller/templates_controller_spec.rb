@@ -46,13 +46,14 @@ RSpec.describe TemplatesController, type: :controller do
       end
 
       it "should find the current template" do
-        expect(Template).to receive(:find).and_return(double(Template))
+        template_mock = double("Template")
+        expect(Template).to receive(:find).with(17).and_return(template_mock)
+        allow(template_mock).to receive(:template_questions).and_return([])
         put :question_add, params: { :id => 17 }
       end
 
       it "should create a new template question" do
         template_mock = double("Template")
-
         allow(Template).to receive(:find).with(17).and_return(template_mock)
         allow(template_mock).to receive(:template_questions).and_return([])
 
