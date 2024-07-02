@@ -21,22 +21,15 @@ RSpec.describe TemplatesController, type: :controller do
     end
 
     describe "#new" do
-      it "renders show" do
+      it "renders new" do
         get :new
-        expect(response).to render_template("templates/show")
+        expect(response).to render_template(:new)
       end
-    end
 
-    describe "#show" do
-      it "renders show template" do
-        expect(response).to render_template('templates/new')
-        get :show, params: { id: 1 }
+      it "calls the model to create a new template" do
+        expect(Template).to receive(:new)
+        get :new
       end
-    end
-
-    it "calls the model to create a new template" do
-      expect(Template).to receive(:new)
-      get :new
     end
   end
 

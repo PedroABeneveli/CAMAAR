@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
 
     resources :send_forms, only: [:index, :create]
-    resources :templates, only: [:index, :show, :new, :create, :edit, :update, :destroy] do
+    resources :templates, only: [:index, :new, :create, :edit, :update, :destroy] do
       resources :template_question, only: [:new, :update, :create]
     end
   end
