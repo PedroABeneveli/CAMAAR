@@ -10,8 +10,13 @@ RSpec.describe TemplateQuestionController, type: :controller do
     end
 
     it "finds the current template" do
-      expect(Template).to receive(:find)
-      get :new, params: { :template_id => template.id }
+      expect(Template).to receive(:find).with(template.id).and_return(template)
+      get :new, params: { :template_id => template.id.to_s }
+    end
+
+    it "creates a new template question" do
+      expect(TemplateQuestion).to receive(:new).and_return(TemplateQuestion.new)
+      get :new, params: { :template_id => template.id.to_s }
     end
   end
 

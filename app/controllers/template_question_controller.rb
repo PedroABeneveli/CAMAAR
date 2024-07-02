@@ -1,13 +1,17 @@
 class TemplateQuestionController < ApplicationController
   def new
-    template = Template.find(params[:template_id])
-    if template.nil?
+    @template = Template.find(params[:template_id].to_i)
+    if @template.nil?
       render file: "#{Rails.root}/public/404.html", layout: false, status: :not_found
       return
     end
 
     @template_question = TemplateQuestion.new
-    template.template_questions << @template_question
+    @template_question.question_type = "text"
+
+    @template.template_questions << @template_question
+
+    render :template => "templates/new", :layout => "home"
   end
 
   def update

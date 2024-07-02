@@ -3,16 +3,16 @@ class TemplatesController < ApplicationController
 
   def index
     @templates = Template.all
-
     render layout: "home"
   end
 
   def show
+    @template = Template.find(params[:id])
+    render layout: "home"
   end
 
   def new
     @template = Template.new
-
     render layout: "home"
   end
 
@@ -27,6 +27,7 @@ class TemplatesController < ApplicationController
   end
 
   def edit
+    @template = Template.find(params[:id])
     render layout: "home"
   end
 
