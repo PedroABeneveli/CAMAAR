@@ -31,6 +31,12 @@ RSpec.describe TemplatesController, type: :controller do
         get :new
       end
     end
+
+    describe "add question action" do
+      it "should have an question_add method" do
+        expect(controller).to respond_to(:question_add)
+      end
+    end
   end
 
 end

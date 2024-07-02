@@ -28,6 +28,10 @@ class TemplatesController < ApplicationController
     redirect_to templates_path, notice: 'Template was successfully deleted.'
   end
 
+  def question_add
+    
+  end
+
   private
 
   def template_params

@@ -8,5 +8,5 @@
     <%= form.select :question_type, TemplateQuestion.question_types %>
   </div>
 
-  <%= button_to "Adicionar alternativa", "/todo", method: :put %>
+  <%= button_to "Adicionar alternativa", "/todo", method: :put, id: "add_alternative_button_q#{idx}" %>
 </div>

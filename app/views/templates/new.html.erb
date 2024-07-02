@@ -9,13 +9,13 @@
           </div>
 
           <div id="questions">
-            <% @template.template_questions.each do |question| %>
-              <%= render :partial => "question", :locals => { form: form, question: question } %>
+            <% @template.template_questions.each_with_index do |question, idx| %>
+              <%= render :partial => "question", :locals => { form: form, question: question, idx: idx } %>
             <% end %>
           </div>
 
           <div class="flex w-full justify-center">
-            <%= button_to "+", "/todo", method: :put, id: "add-question-button" %>
+            <%= button_to "Adicionar questão", "/todo", method: :put, id: "add_question_button" %>
           </div>
 
           <div class="flex w-full justify-center">
