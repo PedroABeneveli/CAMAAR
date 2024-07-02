@@ -16,9 +16,7 @@ Rails.application.routes.draw do
 
     resources :send_forms, only: [:index, :create]
     resources :templates, only: [:index, :new, :create, :edit, :update, :destroy] do
-      member do
-        put "question_add", :to => 'templates#question_add', :as => 'question_add'
-      end
+      put "question_add", :to => 'templates#question_add', :as => 'question_add', :on => :member
     end
   end
 
