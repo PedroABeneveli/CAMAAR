@@ -1,25 +1,12 @@
 <div class="bg-white rounded-md p-4">
-  <div class="grid grid-cols-1 gap-4">
-    <div class="flex items-center gap-4">
-      <label for=
-        <% "question_title_#{question.id}" %>>Title</label>
-      <input type="text" name=
-        <% "question_input_#{question.id}" %> id=
-             <% "question_input_#{question.id}" %> class="form-control">
-    </div>
-    <div class="flex items-center gap-4">
-      <label for=
-        <% "question_type_select_#{question.id}" %>>Question Type</label>
-      <select name=
-                <% "question_type_select_#{question.id}" %> id=
-              <% "question_type_select_#{question.id}" %>
-              class="form-control"
-              data-role="type-select"
-      >
-        <option value="text">Text</option>
-        <option value="radio">Radio</option>
-        <option value="checkbox">Checkbox</option>
-      </select>
-    </div>
+  <div class="flex items-center gap-4">
+    <%= form.label :question, "Title" %>
+    <%= form.text_field :question %>
   </div>
+  <div>
+    <%= form.label :question_type, "Question Type" %>
+    <%= form.select :question_type, TemplateQuestion.question_types %>
+  </div>
+
+  <%= button_to "Adicionar alternativa", "/todo", method: :put %>
 </div>

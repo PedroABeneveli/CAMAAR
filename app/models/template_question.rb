@@ -1,5 +1,9 @@
 class TemplateQuestion < ApplicationRecord
   belongs_to :template
-
-  validates :question_type, inclusion: { in: %w(radio checkbox text) }
+  enum question_type: {
+    radio: "radio",
+    checkbox: "checkbox",
+    text: 'text',
+  }
+  validates :question_type, presence: true
 end
