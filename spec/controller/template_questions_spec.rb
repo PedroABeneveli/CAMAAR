@@ -18,6 +18,11 @@ RSpec.describe TemplateQuestionController, type: :controller do
       expect(TemplateQuestion).to receive(:new).and_return(TemplateQuestion.new)
       get :new, params: { :template_id => template.id.to_s }
     end
+
+    it "redirects to template show page" do
+      get :new, params: { :template_id => template.id.to_s }
+      expect(response).to redirect_to(template_path(template.id.to_s))
+    end
   end
 
 end

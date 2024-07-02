@@ -11,7 +11,7 @@ class TemplateQuestionController < ApplicationController
 
     @template.template_questions << @template_question
 
-    render :template => "templates/new", :layout => "home"
+    redirect_to "/gerenciamento/templates/#{@template.id}"
   end
 
   def update
