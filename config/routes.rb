@@ -15,9 +15,8 @@ Rails.application.routes.draw do
     end
 
     resources :send_forms, only: [:index, :create]
-    resources :templates, only: [:index, :new, :create, :edit, :update, :destroy] do
-      put "question_add", :to => 'templates#question_add', :as => 'question_add', :on => :member
-    end
+
+    resources :templates, only: [:index, :new, :create, :edit, :update, :destroy]
   end
 
   get '/gerenciamento', to: 'gerenciamento#index'

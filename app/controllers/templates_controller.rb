@@ -29,7 +29,7 @@ class TemplatesController < ApplicationController
   end
 
   def question_add
-    @template = Template.find(params[:id].to_i)
+    puts "aaaaaaaa"
     @template.template_questions << TemplateQuestion.new
   end
 
