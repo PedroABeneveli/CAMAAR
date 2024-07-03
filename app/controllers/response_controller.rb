@@ -3,6 +3,7 @@ class ResponseController < AvaliacoesController
     @form_request = FormRequest.find(params[:avaliaco_id])
     render layout: "home"
   end
+  
   def create
     @form_request = FormRequest.find(params[:avaliaco_id])
 
