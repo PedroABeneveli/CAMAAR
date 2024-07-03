@@ -25,7 +25,12 @@ class TemplatesController < ApplicationController
   end
 
   def update
-
+    @template = Template.find(params[:id])
+    if @template.update(template_params)
+      redirect_to edit_template_path(@template.id), notice: 'Template was successfully updated.'
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   def destroy

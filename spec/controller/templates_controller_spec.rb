@@ -39,6 +39,16 @@ RSpec.describe TemplatesController, type: :controller do
         }.to change(Template, :count).by(1)
       end
     end
+
+    describe "#update" do
+      it "updates template" do
+        template = Template.create(name: "Template #1")
+
+        post :update, :params => { :id => template.id, :template => { :name => "Template #2" } }
+
+        expect(template.reload.name).to eq("Template #2")
+      end
+    end
   end
 
 end
