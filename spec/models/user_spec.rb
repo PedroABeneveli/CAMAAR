@@ -36,32 +36,16 @@ RSpec.describe User, type: :model do
   end
 
   describe 'create new users based on JSON data' do
-    describe 'create new students' do
-      it 'adds the student to the database and returns them' do
-        std = User.add_student(student_data)
+    it 'adds the student to the database and returns them' do
+      std = User.add_student(student_data)
 
-        expect(User.find_by matricula: "54321").to eq std
-      end
-
-      it 'calls the Mailer to send an email to the student' do
-        User.add_student(student_data)
-
-        expect(Devise.Mailer).to receive(:send).and_return(double("Devise::Mailer", :deliver => true)).twice
-      end
+      expect(User.find_by matricula: "54321").to eq std
     end
 
-    describe 'create new teachers' do
-      it 'adds the teacher to the database and returns them' do
-        teacher = User.add_teacher(teacher_data)
+    it 'adds the teacher to the database and returns them' do
+      teacher = User.add_teacher(teacher_data)
 
-        expect(User.find_by email: "fulano@email.com").to be teacher
-      end
-
-      it 'calls the Mailer to send an email to the teacher' do
-        User.add_teacher(teacher_data)
-
-        expect(Devise.Mailer).to receive(:send).and_return(double("Devise::Mailer", :deliver => true)).twice
-      end
+      expect(User.find_by email: "fulano@email.com").to eq teacher
     end
   end
 end

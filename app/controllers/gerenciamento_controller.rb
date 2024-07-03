@@ -76,6 +76,22 @@ class GerenciamentoController < ApplicationController
     redirect_back_or_to "/gerenciamento"
   end
 
+  def new_user_msg(new_user)
+    if new_user
+      "Usuários cadastrados com sucesso."
+    else
+      "Sem novos usuários."
+    end
+  end
+
+  def new_data_msg(new_data)
+    if new_data
+      "Data imported successfully"
+    else
+      "Não há novos dados para importar"
+    end
+  end
+
   def check_class_members_json(json)
     keys_class_members = ["code", "classCode", "semester", "dicente", "docente"].sort
     keys_dicente = ["nome", "curso", "matricula", "usuario", "formacao", "ocupacao", "email"].sort
