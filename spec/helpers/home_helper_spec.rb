@@ -11,5 +11,11 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe HomeHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "should identify an admin controller name" do
+    expect(helper.is_gerenciamento("gerenciamento")).to eq(true)
+  end
+
+  it "should identify a non-admin controller name" do
+    expect(helper.is_gerenciamento("blah")).to eq(false)
+  end
 end
