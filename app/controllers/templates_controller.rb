@@ -10,12 +10,17 @@ class TemplatesController < ApplicationController
   end
 
   def create
+    @template = Template.new(template_params)
 
+    if @template.save
+      redirect_to edit_template_path(@template.id), notice: 'Template was successfully created.'
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def edit
     @template = Template.find(params[:id])
-    # Do things here to set the template
     render layout: "home"
   end
 
@@ -28,17 +33,9 @@ class TemplatesController < ApplicationController
     redirect_to templates_path, notice: 'Template was successfully deleted.'
   end
 
-  def question_add
-    puts "aaaaaaaa"
-    @template.template_questions << TemplateQuestion.new
-  end
-
   private
 
   def template_params
-    params.require(:template).permit(
-      :name,
-      template_questions_attributes: [:id, :title, :question_type, :content, :_destroy, alternatives: [:content]]
-    )
+    params.require(:template).permit(:name)
   end
 end

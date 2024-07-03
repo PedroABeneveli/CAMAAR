@@ -31,6 +31,14 @@ RSpec.describe TemplatesController, type: :controller do
         get :new
       end
     end
+
+    describe "#create" do
+      it "creates new template" do
+        expect {
+          post :create, :params => { :template => { :name => "Template #1" } }
+        }.to change(Template, :count).by(1)
+      end
+    end
   end
 
 end
