@@ -21,6 +21,20 @@ RSpec.describe ResponseController, type: :controller do
                 }.to change(FormResponse, :count).by(1)
             end
         end
+        
+        describe "blank response" do
+            let(:user) { FactoryBot.create(:user, admin: false) }
+            let(:form_request) { FactoryBot.create(:form_request) }
+
+            before :each do
+                sign_in user
+            end
+            
+            it "handles empty response" do
+                post :create, :params => { :avaliaco_id => form_request.id, :answer_1 => "", :answer_2 => "bla bla" }
+                expect(response).to redirect_to("/avaliacoes/#{form_request.id}/response")
+            end
+        end
     end
 
 end
