@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe GerenciamentoController, type: :controller do
+  let(:user) { FactoryBot.create(:user, admin: true, matricula: "987654", email: "admin@email.com") }
+
+  before :each do
+    sign_in user
+  end
+
   describe 'import data' do
     describe 'invalid JSON' do
       it "warns because it's missing fields (classes.json)" do
@@ -159,8 +165,8 @@ RSpec.describe GerenciamentoController, type: :controller do
       json_members, filepath_members = valid_members
       allow(File).to receive(:read).with(filepath_members).and_return(json_members)
 
-      FactoryBot.build(:user, nome: "Silva", matricula: "54321", usuario: "54321", email: "teste1@email.com").save
-      FactoryBot.build(:user, nome: "FULANO DE CICLANO", matricula: "12345", usuario: "12345", email: "teste2@email.com").save
+      FactoryBot.build(:user, nome: "Silva", matricula: "54321", usuario: "54321", email: "silva@email.com").save
+      FactoryBot.build(:user, nome: "FULANO DE CICLANO", matricula: "12345", usuario: "12345", email: "fulano@email.com").save
 
       expect(Devise.mailer).not_to receive(:send)
 
@@ -189,10 +195,10 @@ def valid_members
           "usuario": "54321",
           "formacao": "graduando",
           "ocupacao": "dicente",
-          "email": "teste1@email.com"
+          "email": "silva@email.com"
         }],
         "docente": { 
-          "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "teste2@email.com", "ocupacao": "docente" 
+          "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "fulano@email.com", "ocupacao": "docente" 
         } 
       } 
     ]
