@@ -1,17 +1,13 @@
 <div class="flex w-full h-full justify-center items-center">
   <div class="flex flex-col w-[600px] max-h-[600px] overflow-y-auto gap-8 bg-white p-8 rounded-lg">
-    <div>
-      <%= form_with(model: @template, url: templates_path, method: :post) do |form| %>
-        <div class="grid grid-cols-1 gap-4">
-          <div class="flex items-center gap-4">
-            <%= form.label :name, "Nome do template:" %>
-            <%= form.text_field :name, class: 'form-control w-full rounded-lg p-4' %>
-          </div>
-        </div>
-        <div class="flex w-full justify-center">
-          <%= form.submit 'Start Template', class: 'btn text-center px-8 py-4 hover:cursor-pointer hover:opacity-75 text-2xl text-white font-semibold rounded-lg bg-[#6C2365]' %>
-        </div>
-      <% end %>
-    </div>
+    <%= form_with(model: @template, url: templates_path, method: :post, class: "flex flex-col gap-4") do |form| %>
+      <div class="flex items-center gap-4">
+        <%= form.label :name, "Nome do template:" %>
+        <%= form.text_field :name, class: 'form-control w-full rounded-lg p-4' %>
+      </div>
+      <div class="flex w-full justify-end">
+        <%= form.submit 'Começar Template', class: 'btn text-center p-4 hover:cursor-pointer hover:opacity-75 text-xl text-white font-semibold rounded-lg bg-[#6C2365]' %>
+      </div>
+    <% end %>
   </div>
 </div>
