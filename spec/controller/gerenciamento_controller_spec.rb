@@ -172,6 +172,36 @@ RSpec.describe GerenciamentoController, type: :controller do
 
       put :import
     end
+
+    describe 'error message' do
+      describe 'new users' do
+        it 'says when there are new users' do
+          msg = controller.new_user_msg(true)
+
+          expect(msg).to include "Usuários cadastrados com sucesso."
+        end
+
+        it 'says when there are no new users' do
+          msg = controller.new_user_msg(false)
+
+          expect(msg).to include "Sem novos usuários."
+        end
+      end
+
+      describe 'new data' do
+        it 'says when there is new data' do
+          msg = controller.new_data_msg(true)
+
+          expect(msg).to include "Data imported successfully"
+        end
+
+        it "says when there isn't new data" do
+          msg = controller.new_data_msg(false)
+
+          expect(msg).to include "Não há novos dados para importar"
+        end
+      end
+    end
   end
 end
 

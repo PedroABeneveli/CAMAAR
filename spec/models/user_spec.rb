@@ -34,4 +34,64 @@ RSpec.describe User, type: :model do
       expect(user.find_pending_forms).to contain_exactly(fr1)
     end
   end
+
+  describe 'create new users based on JSON data' do
+    describe 'create new students' do
+      it 'adds the student to the database and returns them' do
+        std = User.add_student(student_data)
+
+        expect(User.find_by matricula: "54321").to eq std
+      end
+
+      it 'calls the Mailer to send an email to the student' do
+        User.add_student(student_data)
+
+        expect(Devise.Mailer).to receive(:send).and_return(double("Devise::Mailer", :deliver => true)).twice
+      end
+    end
+
+    describe 'create new teachers' do
+      it 'adds the teacher to the database and returns them' do
+        teacher = User.add_teacher(teacher_data)
+
+        expect(User.find_by email: "fulano@email.com").to be teacher
+      end
+
+      it 'calls the Mailer to send an email to the teacher' do
+        User.add_teacher(teacher_data)
+
+        expect(Devise.Mailer).to receive(:send).and_return(double("Devise::Mailer", :deliver => true)).twice
+      end
+    end
+  end
+end
+
+def student_data
+  data = <<-EOF
+    {
+      "nome": "Silva",
+      "curso": "CIÊNCIA DA COMPUTAÇÃO/CIC",
+      "matricula": "54321",
+      "usuario": "54321",
+      "formacao": "graduando",
+      "ocupacao": "dicente",
+      "email": "silva@email.com"
+    } 
+  EOF
+
+  JSON.parse data
+end
+
+def teacher_data
+  data = <<-EOF
+    { 
+      "nome": "FULANO DE CICLANO", 
+      "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", 
+      "formacao": "DOUTORADO", "usuario": "12345", 
+      "email": "fulano@email.com", 
+      "ocupacao": "docente" 
+    } 
+  EOF
+
+  JSON.parse data
 end
