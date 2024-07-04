@@ -18,7 +18,7 @@ class TemplateQuestionController < ApplicationController
     title = template_question_params[:title]
 
     if TemplateQuestion.question_types.values.include?(question_type)
-      flash[:notice] = "Successfully updated question!"
+      flash[:notice] = "Template atualizado com sucesso!"
 
       if question_type == "text"
         @template_question.update(question_type: "text", title: title, content: "")
@@ -34,7 +34,7 @@ class TemplateQuestionController < ApplicationController
 
         @template_question.update(question_type: question_type, title: title, content: alternatives.to_json)
       else
-        flash[:alert] = "Question type #{question_type} does not exist!"
+        flash[:alert] = "Questão de tipo #{question_type} não existe!"
       end
     end
 

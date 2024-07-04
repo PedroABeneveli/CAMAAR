@@ -30,9 +30,14 @@ class TemplatesController < ApplicationController
   end
 
   def update
+    if template_params[:name] == ""
+      redirect_to edit_template_path(params[:id]), alert: "Nome do template em branco!"
+      return
+    end
+    
     @template = Template.find(params[:id])
     if @template.update(template_params)
-      redirect_to edit_template_path(@template.id), notice: 'Template was successfully updated.'
+      redirect_to edit_template_path(@template.id), notice: 'Template atualizado com sucesso!'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -43,7 +48,7 @@ class TemplatesController < ApplicationController
     template = Template.find(id)
     template.update({ hidden: true })
 
-    redirect_to templates_path, notice: 'Template was successfully deleted.'
+    redirect_to templates_path, notice: 'Template deletado com sucesso!'
   end
 
   private

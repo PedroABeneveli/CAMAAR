@@ -4,8 +4,8 @@
   <div class="flex flex-col w-[600px] max-h-[600px] overflow-y-auto gap-8 bg-white p-8 rounded-lg">
     <%= form_with(model: @template, class: "flex flex-col gap-4") do |form| %>
       <div class="flex items-center gap-4">
-        <%= form.text_field :name, class: 'form-control w-full rounded-lg p-4' %>
-        <%= form.submit 'Salvar', class: submit_button_class %>
+        <%= form.text_field :name, id: "template_name", class: 'form-control w-full rounded-lg p-4' %>
+        <%= form.submit 'Salvar', id: "save_template_name", class: submit_button_class %>
       </div>
     <% end %>
 
@@ -34,7 +34,7 @@
                   <!--              <span onclick="addAlternative(#{template_question.id})" data="">Adicionar Alternativa</span>-->
                 </div>
               <% end %>
-              <%= form.submit 'Salvar', class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
+              <%= form.submit 'Salvar', id: "save_question_#{i + 1}", class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
             </div>
           <% end %>
           <%= button_to "Adicionar Alternativa Hidden", "/gerenciamento/templates/#{@template.id}/template_question/#{template_question.id}/add_alternative", method: :post, class: "hidden", id: "add_alternative_#{template_question.id}" %>
@@ -42,7 +42,7 @@
       <% end %>
     </div>
 
-    <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, class: "" %>
+    <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, id: "add_question_button", class: "" %>
   </div>
 </div>
 
