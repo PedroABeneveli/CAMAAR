@@ -52,7 +52,7 @@ RSpec.describe TemplateQuestionController, type: :controller do
       allow(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
       expect(template_question).to receive(:update).with({ title: "Q1", question_type: "radio", content: "[\"1\",\"2\",\"3\"]" })
 
-      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "radio", alternatives: %w[1 2 3] } }
+      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "radio", alternative_1: "1", alternative_2: "2", alternative_3: "3" } }
     end
 
     it "should update the question - checkbox type" do
@@ -60,7 +60,7 @@ RSpec.describe TemplateQuestionController, type: :controller do
       allow(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
       expect(template_question).to receive(:update).with({ title: "Q1", question_type: "checkbox", content: "[\"1\",\"2\",\"3\"]" })
 
-      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "checkbox", alternatives: %w[1 2 3] } }
+      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "checkbox", alternative_1: "1", alternative_2: "2", alternative_3: "3" } }
     end
   end
 end

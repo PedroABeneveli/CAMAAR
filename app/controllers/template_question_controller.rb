@@ -14,20 +14,30 @@ class TemplateQuestionController < ApplicationController
     @template_question = TemplateQuestion.find(id)
 
     template_question_params = params[:template_question]
-    if template_question_params[:question_type] == "text"
-      flash[:notice] = "Successfully updated question!"
-      @template_question.update(question_type: "text", title: template_question_params[:title], content: "")
-    elsif template_question_params[:question_type] == "radio"
-      flash[:notice] = "Successfully updated question!"
-      @template_question.update(question_type: "radio", title: template_question_params[:title], content: template_question_params[:alternatives].to_json)
-    elsif template_question_params[:question_type] == "checkbox"
-      flash[:notice] = "Successfully updated question!"
-      @template_question.update(question_type: "checkbox", title: template_question_params[:title], content: template_question_params[:alternatives].to_json)
-    else
-      flash[:alert] = "Question type #{template_question_params[:question_type]} does not exist!"
-      redirect_to edit_template_path(params[:template_id])
-    end
+    question_type = template_question_params[:question_type]
+    title = template_question_params[:title]
 
-    redirect_to edit_template_path(id)
+    if TemplateQuestion.question_types.values.include?(question_type)
+      flash[:notice] = "Successfully updated question!"
+
+      if question_type == "text"
+        @template_question.update(question_type: "text", title: title, content: "")
+      elsif question_type == "radio" or question_type == "checkbox"
+        alternatives = []
+        1.upto(10) do |i|
+          if template_question_params.key?("alternative_#{i}")
+            alternatives << template_question_params["alternative_#{i}"]
+          else
+            break
+          end
+        end
+
+        @template_question.update(question_type: question_type, title: title, content: alternatives.to_json)
+      else
+        flash[:alert] = "Question type #{question_type} does not exist!"
+      end
+    else
+      redirect_to edit_template_path(id)
+    end
   end
 end
