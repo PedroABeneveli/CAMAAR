@@ -15,14 +15,19 @@ class TemplateQuestionController < ApplicationController
 
     template_question_params = params[:template_question]
     if template_question_params[:question_type] == "text"
-      @template_question.update(question_type: "text", title: template_question_params[:question], content: "")
+      flash[:notice] = "Successfully updated question!"
+      @template_question.update(question_type: "text", title: template_question_params[:title], content: "")
     elsif template_question_params[:question_type] == "radio"
-      @template_question.update(question_type: "radio", title: template_question_params[:question], content: template_question_params[:alternatives].to_json)
+      flash[:notice] = "Successfully updated question!"
+      @template_question.update(question_type: "radio", title: template_question_params[:title], content: template_question_params[:alternatives].to_json)
     elsif template_question_params[:question_type] == "checkbox"
-      @template_question.update(question_type: "checkbox", title: template_question_params[:question], content: template_question_params[:alternatives].to_json)
+      flash[:notice] = "Successfully updated question!"
+      @template_question.update(question_type: "checkbox", title: template_question_params[:title], content: template_question_params[:alternatives].to_json)
     else
       flash[:alert] = "Question type #{template_question_params[:question_type]} does not exist!"
       redirect_to edit_template_path(params[:template_id])
     end
+
+    redirect_to edit_template_path(id)
   end
 end

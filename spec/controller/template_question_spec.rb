@@ -34,8 +34,9 @@ RSpec.describe TemplateQuestionController, type: :controller do
     it "should find the current template question" do
       template_question = double("template_question")
       expect(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
+      expect(template_question).to receive(:update)
 
-      post :update, params: { template_id: "17", id: "13" }
+      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "text" } }
     end
 
     it "should update the question - text type" do
@@ -43,7 +44,7 @@ RSpec.describe TemplateQuestionController, type: :controller do
       allow(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
       expect(template_question).to receive(:update).with({ title: "Q1", question_type: "text", content: "" })
 
-      post :update, params: { template_id: "17", id: "13", template_question: { question: "Q1", question_type: "text" } }
+      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "text" } }
     end
 
     it "should update the question - radio type" do
@@ -51,7 +52,7 @@ RSpec.describe TemplateQuestionController, type: :controller do
       allow(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
       expect(template_question).to receive(:update).with({ title: "Q1", question_type: "radio", content: "[\"1\",\"2\",\"3\"]" })
 
-      post :update, params: { template_id: "17", id: "13", template_question: { question: "Q1", question_type: "radio", alternatives: %w[1 2 3] } }
+      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "radio", alternatives: %w[1 2 3] } }
     end
 
     it "should update the question - checkbox type" do
@@ -59,7 +60,7 @@ RSpec.describe TemplateQuestionController, type: :controller do
       allow(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
       expect(template_question).to receive(:update).with({ title: "Q1", question_type: "checkbox", content: "[\"1\",\"2\",\"3\"]" })
 
-      post :update, params: { template_id: "17", id: "13", template_question: { question: "Q1", question_type: "checkbox", alternatives: %w[1 2 3] } }
+      post :update, params: { template_id: "17", id: "13", template_question: { title: "Q1", question_type: "checkbox", alternatives: %w[1 2 3] } }
     end
   end
 end
