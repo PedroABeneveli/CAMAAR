@@ -23,6 +23,6 @@
         </div>
       <% end %>
     <% end %>
-    <%#= button_to "Importar Dados", gerenciamento_import_path, method: :put, class: "" %>
+    <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, class: "" %>
   </div>
 </div>
