@@ -16,7 +16,9 @@ Rails.application.routes.draw do
 
     resources :send_forms, only: [:index, :create]
 
-    resources :templates, only: [:index, :new, :create, :edit, :update]
+    resources :templates, only: [:index, :new, :create, :edit, :update] do
+      resources :template_question, only: [:create, :edit, :update]
+    end
   end
 
   get '/gerenciamento', to: 'gerenciamento#index'

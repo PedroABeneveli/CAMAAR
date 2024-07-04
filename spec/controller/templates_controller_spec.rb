@@ -50,5 +50,4 @@ RSpec.describe TemplatesController, type: :controller do
       end
     end
   end
-
 end
