@@ -8,21 +8,23 @@
         <%= form.submit 'Salvar', class: submit_button_class %>
       </div>
     <% end %>
-    <% @template.template_questions.each do |template_question| %>
+
+    <% @template.template_questions.each_with_index do |template_question, idx| %>
       <%= form_with(model: template_question, url: template_template_question_path(@template.id), class: "") do |form| %>
-        <div class="bg-white rounded-md p-4">
+        <div class="flex flex-col gap-2 p-4">
           <div class="flex items-center gap-4">
-            <%= form.label :question, "Questão" %>
-            <%= form.text_field :question %>
+            <%= form.label :question, "Q#{idx + 1}." %>
+            <%= form.text_field :question, class: "w-full rounded-lg" %>
           </div>
-          <div>
+          <div class="flex items-center justify-between gap-4">
             <%= form.label :question_type, "Tipo da Questão" %>
             <%= form.select :question_type, TemplateQuestion.question_types %>
           </div>
-          <%= form.submit 'Salvar', class: submit_button_class %>
+          <%= form.submit 'Salvar', class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
         </div>
       <% end %>
     <% end %>
+
     <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, class: "" %>
   </div>
 </div>
