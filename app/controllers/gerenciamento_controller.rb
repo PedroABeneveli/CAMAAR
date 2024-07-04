@@ -16,25 +16,19 @@ class GerenciamentoController < ApplicationController
       new_users = false
 
       hash_class.each do |materia|
-        if StudyClass.find_by(code: materia["code"], classCode: materia["class"]["classCode"], semester: materia["class"]["semester"]) == nil
-          StudyClass.create(code: materia["code"], name: materia["name"], classCode: materia["class"]["classCode"], semester: materia["class"]["semester"], time: materia["class"]["time"])
-          new_data = true
-        end
+        new_data |= StudyClass.update_with_hash_data materia
       end
 
       hash_members.each do |materia|
+        # nao da pra usar o find with json pq a estrutura desse json eh diferente
         turma = StudyClass.find_by code: materia["code"], classCode: materia["classCode"], semester: materia["semester"]
 
         materia["dicente"].each do |aluno|
           pessoa = User.find_by matricula: aluno["matricula"]
 
           if pessoa == nil
-            pessoa = User.new nome: aluno["nome"], curso: aluno["curso"], matricula: aluno["matricula"], usuario: aluno["usuario"], formacao: aluno["formacao"], ocupacao: aluno["ocupacao"], email: aluno["email"]
-            pessoa.skip_password_validation = true
-            pessoa.save
+            pessoa = User.add_student(aluno)
             new_data = true
-
-            pessoa.send_reset_password_instructions
             new_users = true
           end
 
@@ -45,31 +39,15 @@ class GerenciamentoController < ApplicationController
         professor = materia["docente"]
         pessoa = User.find_by email: professor["email"]
         if pessoa == nil
-          pessoa = User.new nome: professor["nome"], departamento: professor["departamento"], formacao: professor["formacao"], matricula: professor["usuario"], usuario: professor["usuario"], email: professor["email"], ocupacao: professor["ocupacao"]
-          pessoa.skip_password_validation = true
-          pessoa.save
+          pessoa = User.add_teacher professor
           new_data = true
-
-          pessoa.send_reset_password_instructions
           new_users = true
         end
         turma.docente_id = pessoa.id
         pessoa.study_classes << turma
       end
 
-      message = ""
-      if new_data
-        message += "Data imported successfully"
-      else
-        message += "Não há novos dados para importar"
-      end
-
-      if new_users
-        message += "\nUsuários cadastrados com sucesso."
-      else
-        message += "\nSem novos usuários."
-      end
-
+      message = new_data_msg(new_data) + "\n" + new_user_msg(new_users)
       flash[:notice] = message
     end
 
