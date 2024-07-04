@@ -3,4 +3,8 @@ class Template < ApplicationRecord
   accepts_nested_attributes_for :template_questions, allow_destroy: true, reject_if: :all_blank
 
   validates :name, presence: true
+
+  def self.all_visible
+    return Template.where(hidden: false)
+  end
 end

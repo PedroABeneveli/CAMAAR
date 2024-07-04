@@ -1,6 +1,6 @@
 class TemplatesController < ApplicationController
   def index
-    @templates = Template.all
+    @templates = Template.all_visible
     render layout: "home"
   end
 
@@ -36,7 +36,7 @@ class TemplatesController < ApplicationController
   def destroy
     id = params[:id].to_i
     template = Template.find(id)
-    template.update({ destroyed: true })
+    template.update({ hidden: true })
 
     redirect_to templates_path, notice: 'Template was successfully deleted.'
   end

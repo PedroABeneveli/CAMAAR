@@ -15,7 +15,7 @@ RSpec.describe TemplatesController, type: :controller do
       end
 
       it "gets all templates on index" do
-        expect(Template).to receive(:all)
+        expect(Template).to receive(:all_visible)
         get :index
       end
     end
@@ -54,6 +54,7 @@ RSpec.describe TemplatesController, type: :controller do
       it "finds current template" do
         template = double("template")
         expect(Template).to receive(:find).with(17).and_return(template)
+        allow(template).to receive(:update).with({ hidden: true })
 
         post :destroy, :params => { :id => "17" }
       end
@@ -61,7 +62,7 @@ RSpec.describe TemplatesController, type: :controller do
       it "updates template with destroyed true" do
         template = double("template")
         allow(Template).to receive(:find).with(17).and_return(template)
-        expect(template).to receive(:update).with({ destroyed: true })
+        expect(template).to receive(:update).with({ hidden: true })
 
         post :destroy, :params => { :id => "17" }
       end
