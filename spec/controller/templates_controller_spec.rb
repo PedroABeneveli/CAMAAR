@@ -49,5 +49,22 @@ RSpec.describe TemplatesController, type: :controller do
         expect(template.reload.name).to eq("Template #2")
       end
     end
+
+    describe "#delete" do
+      it "finds current template" do
+        template = double("template")
+        expect(Template).to receive(:find).with(17).and_return(template)
+
+        post :destroy, :params => { :id => "17" }
+      end
+
+      it "updates template with destroyed true" do
+        template = double("template")
+        allow(Template).to receive(:find).with(17).and_return(template)
+        expect(template).to receive(:update).with({ destroyed: true })
+
+        post :destroy, :params => { :id => "17" }
+      end
+    end
   end
 end

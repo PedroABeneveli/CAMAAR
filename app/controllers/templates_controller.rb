@@ -34,7 +34,10 @@ class TemplatesController < ApplicationController
   end
 
   def destroy
-    @template.destroy
+    id = params[:id].to_i
+    template = Template.find(id)
+    template.update({ destroyed: true })
+
     redirect_to templates_path, notice: 'Template was successfully deleted.'
   end
 

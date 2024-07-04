@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
     resources :send_forms, only: [:index, :create]
 
-    resources :templates, only: [:index, :new, :create, :edit, :update] do
+    resources :templates, only: [:index, :new, :create, :edit, :update, :destroy] do
       resources :template_question, only: [:create, :edit, :update] do
         post 'add_alternative', :to => 'template_question#add_alternative', :as => 'add_alternative'
       end
