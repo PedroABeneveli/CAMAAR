@@ -9,17 +9,27 @@
       </div>
     <% end %>
 
-    <% @template.template_questions.each_with_index do |template_question, idx| %>
+    <% @template.template_questions.each_with_index do |template_question, i| %>
       <%= form_with(model: template_question, url: template_template_question_path(@template.id), class: "") do |form| %>
         <div class="flex flex-col gap-2 p-4">
           <div class="flex items-center gap-4">
-            <%= form.label :title, "Q#{idx + 1}." %>
+            <%= form.label :title, "Q#{i + 1}." %>
             <%= form.text_field :title, class: "w-full rounded-lg" %>
           </div>
           <div class="flex items-center justify-between gap-4">
             <%= form.label :question_type, "Tipo da Questão" %>
             <%= form.select :question_type, TemplateQuestion.question_types %>
           </div>
+          <% if %w(radio checkbox).include?(template_question.question_type.to_s) %>
+            <div>
+              <% JSON.parse(template_question.content).each_with_index do |alternative, j| %>
+                <div class="p-4 flex items-center gap-4">
+                  <%= form.label "alternative_#{j + 1}", "A#{j + 1}." %>
+                  <%= form.text_field "alternative_#{j + 1}", class: "w-full rounded-lg" %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
           <%= form.submit 'Salvar', class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
         </div>
       <% end %>

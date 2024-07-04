@@ -40,4 +40,9 @@ class TemplateQuestionController < ApplicationController
       redirect_to edit_template_path(id)
     end
   end
+
+  def add_alternative
+    id = params[:template_question_id].to_i
+    @template_question = TemplateQuestion.find(id)
+  end
 end
