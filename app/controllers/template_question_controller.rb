@@ -36,19 +36,19 @@ class TemplateQuestionController < ApplicationController
       else
         flash[:alert] = "Question type #{question_type} does not exist!"
       end
-    else
-      redirect_to edit_template_path(id)
     end
+
+    redirect_to edit_template_path(id)
   end
 
   def add_alternative
     id = params[:template_question_id].to_i
     @template_question = TemplateQuestion.find(id)
 
-    alternatives = JSON.parse @template_question.alternatives
-    alternatives << params[:alternative]
+    alternatives = JSON.parse @template_question.content
+    alternatives << ""
 
-    @template_question.update({ alternatives: alternatives.to_json })
+    @template_question.update({ content: alternatives.to_json })
 
     redirect_to edit_template_path(id)
   end

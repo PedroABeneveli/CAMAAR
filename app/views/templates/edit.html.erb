@@ -10,7 +10,7 @@
     <% end %>
 
     <% @template.template_questions.each_with_index do |template_question, i| %>
-      <%= form_with(model: template_question, url: template_template_question_path(@template.id), class: "") do |form| %>
+      <%= form_with(model: template_question, url: template_template_question_path(@template.id, template_question.id), class: "") do |form| %>
         <div class="flex flex-col gap-2 p-4">
           <div class="flex items-center gap-4">
             <%= form.label :title, "Q#{i + 1}." %>
@@ -28,13 +28,22 @@
                   <%= form.text_field "alternative_#{j + 1}", class: "w-full rounded-lg" %>
                 </div>
               <% end %>
+              <span onclick="addAlternative()">Adicionar Alternativa</span>
             </div>
           <% end %>
           <%= form.submit 'Salvar', class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
         </div>
       <% end %>
+      <%= button_to "Adicionar Alternativa Hidden", "/gerenciamento/templates/#{@template.id}/template_question/#{template_question.id}/add_alternative", method: :post, class: "hidden", id: "add_alternative" %>
     <% end %>
 
     <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, class: "" %>
   </div>
 </div>
+
+<script>
+    function addAlternative() {
+        console.log("hey there")
+        document.getElementById('add_alternative').click();
+    }
+</script>

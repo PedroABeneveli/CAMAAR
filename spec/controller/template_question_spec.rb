@@ -67,19 +67,19 @@ RSpec.describe TemplateQuestionController, type: :controller do
       it "should find the current template question" do
         template_question = double("template_question")
         expect(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
-        allow(template_question).to receive(:alternatives).and_return("[]")
+        allow(template_question).to receive(:content).and_return("[]")
         expect(template_question).to receive(:update)
 
-        post :add_alternative, params: { template_id: "17", template_question_id: "13", alternative: "1" }
+        post :add_alternative, params: { template_id: "17", template_question_id: "13" }
       end
 
       it "should add a new alternative" do
         template_question = double("template_question")
         allow(TemplateQuestion).to receive(:find).with(13).and_return(template_question)
-        allow(template_question).to receive(:alternatives).and_return("[\"1\",\"2\"]")
-        expect(template_question).to receive(:update).with({ alternatives: "[\"1\",\"2\",\"A1\"]" })
+        allow(template_question).to receive(:content).and_return("[\"1\",\"2\"]")
+        expect(template_question).to receive(:update).with({ content: "[\"1\",\"2\",\"\"]" })
 
-        post :add_alternative, params: { template_id: "17", template_question_id: "13", alternative: "A1" }
+        post :add_alternative, params: { template_id: "17", template_question_id: "13" }
       end
     end
   end
