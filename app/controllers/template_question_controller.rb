@@ -44,5 +44,12 @@ class TemplateQuestionController < ApplicationController
   def add_alternative
     id = params[:template_question_id].to_i
     @template_question = TemplateQuestion.find(id)
+
+    alternatives = JSON.parse @template_question.alternatives
+    alternatives << params[:alternative]
+
+    @template_question.update({ alternatives: alternatives.to_json })
+
+    redirect_to edit_template_path(id)
   end
 end
