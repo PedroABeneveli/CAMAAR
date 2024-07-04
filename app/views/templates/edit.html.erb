@@ -25,16 +25,17 @@
               <% JSON.parse(template_question.content).each_with_index do |alternative, j| %>
                 <div class="p-4 flex items-center gap-4">
                   <%= form.label "alternative_#{j + 1}", "A#{j + 1}." %>
-                  <%= form.text_field "alternative_#{j + 1}", class: "w-full rounded-lg" %>
+                  <%= form.text_field "alternative_#{j + 1}", value: alternative, class: "w-full rounded-lg" %>
                 </div>
               <% end %>
-              <span onclick="addAlternative()">Adicionar Alternativa</span>
+              <%= content_tag 'span', 'Adicionar Alternativa', onclick: "addAlternative(#{template_question.id})" %>
+              <!--              <span onclick="addAlternative(#{template_question.id})" data="">Adicionar Alternativa</span>-->
             </div>
           <% end %>
           <%= form.submit 'Salvar', class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
         </div>
       <% end %>
-      <%= button_to "Adicionar Alternativa Hidden", "/gerenciamento/templates/#{@template.id}/template_question/#{template_question.id}/add_alternative", method: :post, class: "hidden", id: "add_alternative" %>
+      <%= button_to "Adicionar Alternativa Hidden", "/gerenciamento/templates/#{@template.id}/template_question/#{template_question.id}/add_alternative", method: :post, class: "hidden", id: "add_alternative_#{template_question.id}" %>
     <% end %>
 
     <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, class: "" %>
@@ -42,8 +43,7 @@
 </div>
 
 <script>
-    function addAlternative() {
-        console.log("hey there")
-        document.getElementById('add_alternative').click();
+    function addAlternative(questionId) {
+        document.getElementById(`add_alternative_${questionId}`).click();
     }
 </script>
