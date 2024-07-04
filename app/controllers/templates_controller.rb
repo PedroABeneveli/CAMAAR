@@ -10,10 +10,15 @@ class TemplatesController < ApplicationController
   end
 
   def create
+    if template_params[:name] == ""
+      redirect_to new_template_path, alert: "Nome do template em branco!"
+      return
+    end
+
     @template = Template.new(template_params)
 
     if @template.save
-      redirect_to edit_template_path(@template.id), notice: 'Template was successfully created.'
+      redirect_to edit_template_path(@template.id), notice: 'Template iniciado com sucesso!'
     else
       render :new, status: :unprocessable_entity
     end
