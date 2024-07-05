@@ -43,9 +43,9 @@ RSpec.describe StudyClass, type: :model do
       allow(study_class).to receive(:docente).and_return(teacher)
       allow(teacher).to receive(:present?).and_return(false)
 
-      expect(FormRequest).to receive(:send).with(tpt, us1, study_class)
-      expect(FormRequest).to receive(:send).with(tpt, us2, study_class)
-      expect(FormRequest).to receive(:send).with(tpt, us3, study_class)
+      expect(FormRequest).to receive(:send_form).with(tpt, us1, study_class)
+      expect(FormRequest).to receive(:send_form).with(tpt, us2, study_class)
+      expect(FormRequest).to receive(:send_form).with(tpt, us3, study_class)
 
       study_class.send_form_to_users(tpt)
     end
@@ -63,11 +63,11 @@ RSpec.describe StudyClass, type: :model do
       allow(study_class).to receive(:docente).and_return(teacher)
       allow(teacher).to receive(:present?).and_return(true)
 
-      allow(FormRequest).to receive(:send).with(tpt, us1, study_class)
-      allow(FormRequest).to receive(:send).with(tpt, us2, study_class)
-      allow(FormRequest).to receive(:send).with(tpt, us3, study_class)
+      allow(FormRequest).to receive(:send_form).with(tpt, us1, study_class)
+      allow(FormRequest).to receive(:send_form).with(tpt, us2, study_class)
+      allow(FormRequest).to receive(:send_form).with(tpt, us3, study_class)
 
-      expect(FormRequest).to receive(:send).with(tpt, teacher, study_class)
+      expect(FormRequest).to receive(:send_form).with(tpt, teacher, study_class)
 
       study_class.send_form_to_users(tpt)
     end

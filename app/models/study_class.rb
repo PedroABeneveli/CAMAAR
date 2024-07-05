@@ -17,11 +17,11 @@ class StudyClass < ActiveRecord::Base
 
   def send_form_to_users(template)
     self.users.each do |user|
-      FormRequest.send(template, user, self)
+      FormRequest.send_form(template, user, self)
     end
 
     if self.docente.present?
-      FormRequest.send(template, self.docente, self)
+      FormRequest.send_form(template, self.docente, self)
     end
   end
 end
