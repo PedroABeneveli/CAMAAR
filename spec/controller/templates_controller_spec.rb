@@ -38,15 +38,38 @@ RSpec.describe TemplatesController, type: :controller do
           post :create, :params => { :template => { :name => "Template #1" } }
         }.to change(Template, :count).by(1)
       end
+
+      it "handles empty field" do
+        post :create, :params => { :template => { :name => ""} } 
+
+        expect(response).to redirect_to(new_template_path)
+        expect(flash[:alert]).to eq("Nome do template em branco!")
+      end
+    end
+
+    describe "#edit" do
+      let(:template) { FactoryBot.create(:template) }
+
+      it "renders the edit template" do
+        get :edit, params: { id: template.id }
+        expect(response).to render_template(:edit)
+      end
     end
 
     describe "#update" do
+      let(:template) { FactoryBot.create(:template) }
+      
       it "updates template" do
-        template = Template.create(name: "Template #1")
-
         post :update, :params => { :id => template.id, :template => { :name => "Template #2" } }
 
         expect(template.reload.name).to eq("Template #2")
+      end
+
+      it "handles empty field" do
+        post :update, params: { template: { name: ""}, id: template.id }
+        
+        expect(response).to redirect_to(edit_template_path(template.id))
+        expect(flash[:alert]).to eq("Nome do template em branco!")
       end
     end
 
