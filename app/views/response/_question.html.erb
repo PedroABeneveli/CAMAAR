@@ -2,13 +2,13 @@
   <span><%= question[:index] + 1 %>. <%= question[:title] %></span>
   <% if question[:type] == "text" %>
     <div class="flex w-full p-4">
-      <%= form.text_field("answer_#{question[:index]}", class: "w-full p-2 rounded-lg")  %>
+      <%= form.text_field("answer_#{question[:index]}", class: "w-full p-2 rounded-lg") %>
     </div>
   <% elsif question[:type] == "radio" %>
     <%= render partial: 'radio_answer', :locals => {
       form: form, question_id: question[:index], options: JSON.parse(question[:content])
     } %>
-  <% elsif question[:type] == "dropdown" %>
+  <% elsif question[:type] == "checkbox" %>
     <%= render partial: 'dropdown_answer', :locals => {
       form: form, question_id: question[:index], options: JSON.parse(question[:content])
     } %>
