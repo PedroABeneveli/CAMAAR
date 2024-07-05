@@ -1,83 +1,59 @@
 class TemplatesController < ApplicationController
-  before_action :set_template, except: [:index, :new, :create]
-
-  def index 
-    @templates = Template.all
-
+  def index
+    @templates = Template.all_visible
     render layout: "home"
-  end
-
-  def show
   end
 
   def new
     @template = Template.new
-    @template.template_questions.build
-
     render layout: "home"
   end
 
-  def create 
-    process_alternatives
+  def create
+    if template_params[:name] == ""
+      redirect_to new_template_path, alert: "Nome do template em branco!"
+      return
+    end
+
     @template = Template.new(template_params)
+
     if @template.save
-      redirect_to templates_path
+      redirect_to edit_template_path(@template.id), notice: 'Template iniciado com sucesso!'
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @template = Template.find(params[:id])
     render layout: "home"
   end
 
-  def update 
-    process_alternatives
+  def update
+    if template_params[:name] == ""
+      redirect_to edit_template_path(params[:id]), alert: "Nome do template em branco!"
+      return
+    end
+    
+    @template = Template.find(params[:id])
     if @template.update(template_params)
-      redirect_to templates_path
+      redirect_to edit_template_path(@template.id), notice: 'Template atualizado com sucesso!'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
-  def destroy 
-    @template.destroy
-    redirect_to templates_path, notice: 'Template was successfully deleted.'    
+  def destroy
+    id = params[:id].to_i
+    template = Template.find(id)
+    template.update({ hidden: true })
+
+    redirect_to templates_path, notice: 'Template deletado com sucesso!'
   end
 
   private
 
   def template_params
-    params.require(:template).permit(
-      :name, 
-      template_questions_attributes: [:id, :title, :question_type, :content, :_destroy, alternatives: [:content]]
-    )
+    params.require(:template).permit(:name)
   end
-
-  def set_template
-    @template = Template.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to templates_path
-  end
-
-  def process_alternatives
-    return unless params[:template][:template_questions_attributes]
-  
-    params[:template][:template_questions_attributes].each do |key, question|
-      if question[:question_type] == 'radio' || question[:question_type] == 'checkbox'
-        if question[:alternatives].present?
-          alternatives = []
-          question[:alternatives].each do |key, alt| 
-            alternatives << alt[:content]
-          end
-          question[:content] = alternatives.to_json
-        else
-          question[:content] = '[]' # Empty JSON array if no alternatives
-        end
-      else
-        params[:template][:template_questions_attributes][key][:content] = question[:content]
-      end
-    end
-  end
-  
 end

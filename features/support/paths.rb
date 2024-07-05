@@ -28,6 +28,12 @@ module NavigationHelpers
     when /^the Templates\s?page$/
       '/gerenciamento/templates'
 
+    when /^the Create Templates\s?page$/
+      '/gerenciamento/templates/new'
+
+    when /^the Edit Templates\s?page$/
+      "/gerenciamento/templates/#{@template.id}/edit"
+
     when /^the Definir Senha\s?page$/
       "/users/password/edit?reset_password_token=#{@token}"
 

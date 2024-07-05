@@ -1,124 +1,53 @@
-<div class="flex flex-col gap-4 justify-center">
-  <div class="flex w-full justify-center">
-    <span class="text-2xl font-bold">Editar Template</span>
-  </div>
-  <div>
-    <%= form_with(model: @template, url: template_path(@template), method: :patch, local: true) do |form| %>
-      <div class="grid grid-cols-1 gap-4">
-        <div class="flex items-center gap-4">
-          <%= form.label :name, "Nome do template:" %>
-          <%= form.text_field :name, class: 'form-control' %>
-        </div>
+<% submit_button_class = "btn text-center p-4 hover:cursor-pointer hover:opacity-75 text-xl text-white rounded-lg bg-[#6C2365]" %>
 
-        <div id="questions">
-          <%= form.fields_for :template_questions do |question_form| %>
-            <div class="bg-white rounded-md p-4 question-fields" data-question-index="<%= question_form.index %>">
-              <div class="grid grid-cols-1 gap-4">
-                <div class="flex items-center gap-4">
-                  <%= question_form.label :title, "Title", for: "template_template_questions_attributes_#{question_form.index}_title" %>
-                  <%= question_form.text_field :title, id: "template_template_questions_attributes_#{question_form.index}_title", class: 'form-control' %>
-                </div>
-                <div class="flex items-center gap-4">
-                  <%= question_form.label :question_type, "Question Type", for: "template_template_questions_attributes_#{question_form.index}_question_type" %>
-                  <%= question_form.select :question_type, options_for_select([['Radio', 'radio'], ['Checkbox', 'checkbox'], ['Text', 'text']], question_form.object.question_type), { include_blank: true }, { class: 'form-control', id: "template_template_questions_attributes_#{question_form.index}_question_type", data: { role: "type-select" } } %>
-                </div>
-                <div class="alternatives-container <%= 'hidden' unless ['radio', 'checkbox'].include?(question_form.object.question_type) %>" data-role="alternatives-container">
-                  <div class="flex items-center gap-4">
-                    <button type="button" class="btn btn-secondary" data-role="add-alternative">Add Alternative</button>
-                  </div>
-                  <div class="alternatives-list" data-role="alternatives-list">
-                    <% if ['radio', 'checkbox'].include?(question_form.object.question_type) %>
-                      <% begin
-                          json_string = question_form.object.alternatives.gsub('=>', ':')
-                          alternatives_hash = JSON.parse(json_string)
-                          alternatives_hash.each do |index, alt| %>
-                            <div class="flex items-center gap-4 alternative-field">
-                              <%= question_form.label "template_questions_attributes_#{question_form.index}_alternatives_#{index}_content", "Alternative" %>
-                              <%= question_form.text_field :alternatives, name: "template[template_questions_attributes][#{question_form.index}][alternatives][#{index}][content]", id: "template_template_questions_attributes_#{question_form.index}_alternatives_#{index}_content", value: alt["content"], class: 'form-control alternative-input' %>
-                            </div>
-                      <% end  
-                      rescue JSON::ParserError => e %>
-                        <p>JSON parsing error: <%= e.message %></p>
-                      <% end %>
-                    <% end %>
-                  </div>
-                </div>
-              </div>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="flex w-full justify-center">
-          <button type="button" id="add-question" class="btn btn-secondary">Add Question</button>
-        </div>
-        
-        <div class="flex w-full justify-center">
-          <%= form.submit 'Update Template', class: 'btn btn-primary' %>
-        </div>
+<div class="flex w-full h-full justify-center items-center">
+  <div class="flex flex-col w-[600px] max-h-[600px] overflow-y-auto gap-8 bg-white p-8 rounded-lg">
+    <%= form_with(model: @template, class: "flex flex-col gap-4") do |form| %>
+      <div class="flex items-center gap-4">
+        <%= form.text_field :name, id: "template_name", class: 'form-control w-full rounded-lg p-4' %>
+        <%= form.submit 'Salvar', id: "save_template_name", class: submit_button_class %>
       </div>
     <% end %>
+
+    <div class="flex flex-col gap-4 divide-y">
+      <% @template.template_questions.each_with_index do |template_question, i| %>
+        <div>
+          <%= form_with(model: template_question, url: template_template_question_path(@template.id, template_question.id)) do |form| %>
+            <div class="flex flex-col gap-2 p-4">
+              <div class="flex items-center gap-4">
+                <%= form.label :title, "Q#{i + 1}." %>
+                <%= form.text_field :title, class: "w-full rounded-lg" %>
+              </div>
+              <div class="flex items-center justify-between gap-4">
+                <%= form.label :question_type, "Tipo da Questão" %>
+                <%= form.select :question_type, TemplateQuestion.question_types %>
+              </div>
+              <% if %w(radio checkbox).include?(template_question.question_type.to_s) %>
+                <div>
+                  <% JSON.parse(template_question.content).each_with_index do |alternative, j| %>
+                    <div class="p-4 flex items-center gap-4">
+                      <%= form.label "alternative_#{j + 1}", "A#{j + 1}." %>
+                      <%= form.text_field "alternative_#{j + 1}", value: alternative, class: "w-full rounded-lg" %>
+                    </div>
+                  <% end %>
+                  <%= content_tag 'span', 'Adicionar Alternativa', onclick: "addAlternative(#{template_question.id})" %>
+                  <!--              <span onclick="addAlternative(#{template_question.id})" data="">Adicionar Alternativa</span>-->
+                </div>
+              <% end %>
+              <%= form.submit 'Salvar', id: "save_question_#{i + 1}", class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
+            </div>
+          <% end %>
+          <%= button_to "Adicionar Alternativa Hidden", "/gerenciamento/templates/#{@template.id}/template_question/#{template_question.id}/add_alternative", method: :post, class: "hidden", id: "add_alternative_#{template_question.id}" %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, id: "add_question_button", class: "" %>
   </div>
 </div>
 
-<%= javascript_tag do %>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('add-question').addEventListener('click', function() {
-      var questionsDiv = document.getElementById('questions');
-      var newQuestionIndex = questionsDiv.children.length;
-      var newQuestionFields = `
-        <div class="bg-white rounded-md p-4 question-fields" data-question-index="${newQuestionIndex}">
-          <div class="grid grid-cols-1 gap-4">
-            <div class="flex items-center gap-4">
-              <label for="template_template_questions_attributes_${newQuestionIndex}_title">Title</label>
-              <input type="text" name="template[template_questions_attributes][${newQuestionIndex}][title]" id="template_template_questions_attributes_${newQuestionIndex}_title" class="form-control">
-            </div>
-            <div class="flex items-center gap-4">
-              <label for="template_template_questions_attributes_${newQuestionIndex}_question_type">Question Type</label>
-              <select name="template[template_questions_attributes][${newQuestionIndex}][question_type]" id="template_template_questions_attributes_${newQuestionIndex}_question_type" class="form-control" data-role="type-select">
-                <option value="radio">Radio</option>
-                <option value="checkbox">Checkbox</option>
-                <option value="text">Text</option>
-              </select>
-            </div>
-            <div class="alternatives-container hidden" data-role="alternatives-container">
-              <div class="flex items-center gap-4">
-                <button type="button" class="btn btn-secondary" data-role="add-alternative">Add Alternative</button>
-              </div>
-              <div class="alternatives-list" data-role="alternatives-list">
-              </div>
-            </div>
-          </div>
-        </div>`;
-      questionsDiv.insertAdjacentHTML('beforeend', newQuestionFields);
-    });
-
-    document.addEventListener('change', function(e) {
-      if (e.target.matches('[data-role="type-select"]')) {
-        var questionFields = e.target.closest('.question-fields');
-        var alternativesContainer = questionFields.querySelector('[data-role="alternatives-container"]');
-        
-        if (e.target.value === 'radio' || e.target.value === 'checkbox') {
-          alternativesContainer.classList.remove('hidden');
-        } else {
-          alternativesContainer.classList.add('hidden');
-          alternativesContainer.querySelector('[data-role="alternatives-list"]').innerHTML = '';
-        }
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (e.target.matches('[data-role="add-alternative"]')) {
-        var questionFields = e.target.closest('.question-fields');
-        var alternativesList = questionFields.querySelector('[data-role="alternatives-list"]');
-        var newAlternativeIndex = alternativesList.children.length;
-        var questionIndex = questionFields.getAttribute('data-question-index');
-        var newAlternativeFields = `
-          <div class="flex items-center gap-4 alternative-field">
-            <label for="alternative_${questionIndex}_${newAlternativeIndex}">Alternative</label>
-            <input type="text" class="form-control alternative-input" name="template[template_questions_attributes][${questionIndex}][alternatives][${newAlternativeIndex}][content]">
-          </div>`;
-        alternativesList.insertAdjacentHTML('beforeend', newAlternativeFields);
-      }
-    });
-  });
-<% end %>
+<script>
+    function addAlternative(questionId) {
+        document.getElementById(`add_alternative_${questionId}`).click();
+    }
+</script>

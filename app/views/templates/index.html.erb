@@ -2,12 +2,12 @@
   <span class="text-4xl font-bold text-slate-600">Templates</span>
 
   <div class="grid grid-cols-3 gap-8">
-    <% @templates.each do |template| %>
+    <% @templates.each_with_index do |template, i| %>
       <div class="flex flex-row items-center justify-between w-64 bg-white rounded-md p-4">
         <span class="text-xl font-semibold text-slate-600"><%= template.name %></span>
         <div class="flex gap-2">
           <%= link_to 'Edit', edit_template_path(template), class: 'btn btn-primary' %>
-          <%= button_to 'Delete', template_path(template), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          <%= button_to 'Delete', template_path(template), method: :delete, form: { data: { turbo_confirm: 'Tem certeza que deseja deletar esse template?' } }, id: "delete_template_#{i + 1}", class: 'btn btn-danger' %>
         </div>
       </div>
     <% end %>
