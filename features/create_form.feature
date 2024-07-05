@@ -16,6 +16,8 @@ Feature: create a class evaluation form
     Then I should be on the Gerenciamento page
     And I should see "Formulário enviado com sucesso!"
 
-#  Scenario: Not selecting a template or class (sad path)
-#    When I press "Enviar"
-#    Then I should see "Erro: campos não preenchidos"
+  Scenario: Not selecting any class (sad path)
+    When I select "Template1" from "template"
+    And I press "send_forms_button"
+    Then I should be on the Send Forms page
+    And I should see "Nenhuma turma selecionada!"
