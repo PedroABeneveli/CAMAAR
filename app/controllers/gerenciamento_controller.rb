@@ -1,10 +1,21 @@
 class GerenciamentoController < ApplicationController
-  before_action :authenticate_user!
-  before_action :enforce_admin!
+  before_action :authenticate_user!  # Requer autenticação de usuário antes de qualquer ação
+  before_action :enforce_admin!       # Garante que apenas administradores tenham acesso a certas ações
+
+  # Método que renderiza a página inicial do gerenciamento
+  #
+  # Não recebe argumentos.
+  # Não retorna valor.
+  # Não possui efeitos colaterais.
   def index
     render layout: "home"
   end
 
+  # Método para importar dados de arquivos JSON para o sistema
+  #
+  # Não recebe argumentos.
+  # Não retorna valor.
+  # Pode ter efeitos colaterais: criação de novos registros no banco de dados e envio de instruções de redefinição de senha por email.
   def import
     hash_class = JSON.parse(File.read("classes.json"))
     hash_members = JSON.parse(File.read("class_members.json"))
@@ -76,6 +87,13 @@ class GerenciamentoController < ApplicationController
     redirect_back_or_to "/gerenciamento"
   end
 
+  # Método para verificar a estrutura do JSON de membros de classe
+  #
+  # Argumentos:
+  # - json: Um objeto JSON a ser verificado
+  #
+  # Retorna true se a estrutura do JSON estiver correta, false caso contrário.
+  # Não possui efeitos colaterais.
   def check_class_members_json(json)
     keys_class_members = ["code", "classCode", "semester", "dicente", "docente"].sort
     keys_dicente = ["nome", "curso", "matricula", "usuario", "formacao", "ocupacao", "email"].sort
@@ -88,7 +106,7 @@ class GerenciamentoController < ApplicationController
         if not obj.respond_to? :keys or obj.keys.sort != keys_class_members
           return false
         else
-          # dicente eh uma lista de objs
+          # dicente é uma lista de objetos
           if obj["dicente"].respond_to? :keys
             return false
           else
@@ -109,11 +127,18 @@ class GerenciamentoController < ApplicationController
     end
   end
 
+  # Método para verificar a estrutura do JSON de classes
+  #
+  # Argumentos:
+  # - json: Um objeto JSON a ser verificado
+  #
+  # Retorna true se a estrutura do JSON estiver correta, false caso contrário.
+  # Não possui efeitos colaterais.
   def check_class_json(json)
     keys_classes = ["code", "class", "name"].sort
     keys_class = ["classCode", "semester", "time"].sort
 
-    # sao JSONs de lista, nao eh um objeto direto
+    # São JSONs de lista, não é um objeto direto
     if json.respond_to? :keys
       false
     else
@@ -133,11 +158,15 @@ class GerenciamentoController < ApplicationController
 
   protected
 
+  # Método para garantir que apenas administradores tenham acesso a certas ações
+  #
+  # Não recebe argumentos.
+  # Não retorna valor.
+  # Pode ter efeito colateral: redireciona o usuário não autorizado para a página inicial.
   def enforce_admin!
     unless current_user.admin?
       flash[:alert] = "Usuário não tem permissão para acessar!"
       redirect_to root_path
     end
   end
-
 end

@@ -11,6 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
+
+  # Tabela 'form_requests' que representa as requisições de formulário
   create_table "form_requests", force: :cascade do |t|
     t.integer "study_class_id", null: false
     t.integer "user_id", null: false
@@ -23,6 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
     t.index ["user_id"], name: "index_form_requests_on_user_id"
   end
 
+  # Tabela 'form_responses' que representa as respostas de formulário
   create_table "form_responses", force: :cascade do |t|
     t.integer "study_class_id", null: false
     t.integer "template_id", null: false
@@ -33,6 +36,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
     t.index ["template_id"], name: "index_form_responses_on_template_id"
   end
 
+  # Tabela 'study_classes' que representa as classes de estudo
   create_table "study_classes", force: :cascade do |t|
     t.string "code"
     t.string "name"
@@ -45,6 +49,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
     t.index ["docente_id"], name: "index_study_classes_on_docente_id"
   end
 
+  # Tabela de associação 'study_classes_users' que relaciona usuários e classes de estudo
   create_table "study_classes_users", id: false, force: :cascade do |t|
     t.integer "study_class_id", null: false
     t.integer "user_id", null: false
@@ -52,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
     t.index ["user_id"], name: "index_study_classes_users_on_user_id"
   end
 
+  # Tabela 'template_questions' que representa as perguntas de modelo de formulário
   create_table "template_questions", force: :cascade do |t|
     t.string "title"
     t.string "question_type"
@@ -63,12 +69,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
     t.index ["template_id"], name: "index_template_questions_on_template_id"
   end
 
+  # Tabela 'templates' que representa os modelos de formulário
   create_table "templates", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  # Tabela 'users' que representa os usuários do sistema
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -90,6 +98,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_233538) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  # Adiciona chaves estrangeiras para as tabelas relacionadas
   add_foreign_key "form_requests", "study_classes"
   add_foreign_key "form_requests", "users"
   add_foreign_key "form_responses", "study_classes"
