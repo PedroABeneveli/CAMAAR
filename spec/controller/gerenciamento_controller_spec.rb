@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe GerenciamentoController, type: :controller do
+  let(:user) { FactoryBot.create(:user, admin: true, matricula: "987654", email: "admin@email.com") }
+
+  before :each do
+    sign_in user
+  end
+
   describe 'import data' do
     describe 'invalid JSON' do
       it "warns because it's missing fields (classes.json)" do
@@ -159,12 +165,42 @@ RSpec.describe GerenciamentoController, type: :controller do
       json_members, filepath_members = valid_members
       allow(File).to receive(:read).with(filepath_members).and_return(json_members)
 
-      FactoryBot.build(:user, nome: "Silva", matricula: "54321", usuario: "54321", email: "teste1@email.com").save
-      FactoryBot.build(:user, nome: "FULANO DE CICLANO", matricula: "12345", usuario: "12345", email: "teste2@email.com").save
+      FactoryBot.build(:user, nome: "Silva", matricula: "54321", usuario: "54321", email: "silva@email.com").save
+      FactoryBot.build(:user, nome: "FULANO DE CICLANO", matricula: "12345", usuario: "12345", email: "fulano@email.com").save
 
       expect(Devise.mailer).not_to receive(:send)
 
       put :import
+    end
+
+    describe 'error message' do
+      describe 'new users' do
+        it 'says when there are new users' do
+          msg = controller.new_user_msg(true)
+
+          expect(msg).to include "Usuários cadastrados com sucesso."
+        end
+
+        it 'says when there are no new users' do
+          msg = controller.new_user_msg(false)
+
+          expect(msg).to include "Sem novos usuários."
+        end
+      end
+
+      describe 'new data' do
+        it 'says when there is new data' do
+          msg = controller.new_data_msg(true)
+
+          expect(msg).to include "Data imported successfully"
+        end
+
+        it "says when there isn't new data" do
+          msg = controller.new_data_msg(false)
+
+          expect(msg).to include "Não há novos dados para importar"
+        end
+      end
     end
   end
 end
@@ -189,10 +225,10 @@ def valid_members
           "usuario": "54321",
           "formacao": "graduando",
           "ocupacao": "dicente",
-          "email": "teste1@email.com"
+          "email": "silva@email.com"
         }],
         "docente": { 
-          "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "teste2@email.com", "ocupacao": "docente" 
+          "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "fulano@email.com", "ocupacao": "docente" 
         } 
       } 
     ]
