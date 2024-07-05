@@ -342,6 +342,22 @@ RSpec.describe GerenciamentoController, type: :controller do
         end
       end
     end
+
+    "=begin
+    describe 'update existing data' do
+      # nao faz sentido atualizar dados de turmas, o unico que poderia mudar eh o nome
+
+      it 'updates students data' do
+        json_classes, filepath_classes = valid_classes
+        allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
+
+        json_members, filepath_members = valid_members
+        allow(File).to receive(:read).with(filepath_members).and_return(json_members)
+
+        FactoryBot.create(:user, nome: "SILVA MEDEIROS", matricula: "54321", usuario: "54321", formacao: "graduando", ocupacao: "dicente", email: "silva@email.com")
+      end
+    end
+    =end"
   end
 end
 
