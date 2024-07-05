@@ -14,4 +14,14 @@ class StudyClass < ActiveRecord::Base
 
     false
   end
+
+  def send_form_to_users(template)
+    self.users.each do |user|
+      FormRequest.send_form(template, user, self)
+    end
+
+    if self.docente.present?
+      FormRequest.send_form(template, self.docente, self)
+    end
+  end
 end
