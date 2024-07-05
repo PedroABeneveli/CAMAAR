@@ -1,16 +1,18 @@
-<div class="flex flex-col gap-4 p-8">
+<div class="flex flex-col gap-8 p-8">
   <span class="text-4xl font-bold text-slate-600">Templates</span>
 
-  <div class="grid grid-cols-3 gap-8">
+  <div class="flex flex-wrap gap-8">
     <% @templates.each_with_index do |template, i| %>
-      <div class="flex flex-row items-center justify-between w-64 bg-white rounded-md p-4">
+      <div class="flex flex-col w-64 bg-white rounded-md p-4 gap-4">
         <span class="text-xl font-semibold text-slate-600"><%= template.name %></span>
-        <div class="flex gap-2">
-          <%= link_to 'Edit', edit_template_path(template), class: 'btn btn-primary' %>
-          <%= button_to 'Delete', template_path(template), method: :delete, form: { data: { turbo_confirm: 'Tem certeza que deseja deletar esse template?' } }, id: "delete_template_#{i + 1}", class: 'btn btn-danger' %>
+        <div class="flex justify-end items-center gap-2">
+          <%= link_to 'Edit', edit_template_path(template), class: 'btn px-2 text-[#6C2365] font-semibold border-2 border-[#6C2365] rounded-lg' %>
+          <%= button_to 'Delete', template_path(template), method: :delete, form: { data: { turbo_confirm: 'Tem certeza que deseja deletar esse template?' } }, id: "delete_template_#{i + 1}", class: 'btn px-2 text-white bg-[#6C2365] font-semibold border-2 border-[#6C2365] rounded-lg' %>
         </div>
       </div>
     <% end %>
-    <%= link_to 'Add', new_template_path, class: 'btn' %>
+    <%= link_to new_template_path, class: 'flex items-center btn px-4 py-2 text-2xl text-white bg-[#6C2365] font-bold border-2 border-[#6C2365] rounded-lg' do %>
+      <span>Add</span>
+    <% end %>
   </div>
 </div>

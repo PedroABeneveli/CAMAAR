@@ -30,8 +30,7 @@
                       <%= form.text_field "alternative_#{j + 1}", value: alternative, class: "w-full rounded-lg" %>
                     </div>
                   <% end %>
-                  <%= content_tag 'span', 'Adicionar Alternativa', onclick: "addAlternative(#{template_question.id})" %>
-                  <!--              <span onclick="addAlternative(#{template_question.id})" data="">Adicionar Alternativa</span>-->
+                  <%= content_tag 'span', 'Adicionar Alternativa', onclick: "addAlternative(#{template_question.id})", class: 'btn hover:cursor-pointer hover:opacity-75 text-[#6C2365] font-semibold' %>
                 </div>
               <% end %>
               <%= form.submit 'Salvar', id: "save_question_#{i + 1}", class: "btn text-center rounded-lg px-4 py-2 hover:cursor-pointer hover:opacity-75 bg-[#6C2365] text-white" %>
@@ -42,7 +41,7 @@
       <% end %>
     </div>
 
-    <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, id: "add_question_button", class: "" %>
+    <%= button_to "Adicionar Nova Questão", "/gerenciamento/templates/#{@template.id}/template_question", method: :post, id: "add_question_button", class: 'btn px-4 py-2 text-[#6C2365] font-semibold border-2 border-[#6C2365] rounded-lg' %>
   </div>
 </div>
 
