@@ -1,22 +1,13 @@
 class TemplatesController < ApplicationController
-  before_action :set_template, except: [:index, :new, :create]
 
   # Método para listar todos os templates
   #
   # Não recebe argumentos.
   # Não retorna valor.
   # Não possui efeitos colaterais além de renderizar a página com layout "home".
-  def index 
-    @templates = Template.all
+  def index
+    @templates = Template.all_visible
     render layout: "home"
-  end
-
-  # Método placeholder para mostrar um template específico
-  #
-  # Não recebe argumentos.
-  # Não retorna valor.
-  # Não possui efeitos colaterais.
-  def show
   end
 
   # Método para criar um novo template
@@ -26,6 +17,7 @@ class TemplatesController < ApplicationController
   def new
     @template = Template.new
     @template.template_questions.build
+
     render layout: "home"
   end
 
@@ -33,11 +25,16 @@ class TemplatesController < ApplicationController
   #
   # Não retorna valor explícito.
   # Pode ter efeitos colaterais: cria um novo registro de Template no banco de dados ou redireciona para a página de listagem com status de erro.
-  def create 
-    process_alternatives
+  def create
+    if template_params[:name] == ""
+      redirect_to new_template_path, alert: "Nome do template em branco!"
+      return
+    end
+
     @template = Template.new(template_params)
+
     if @template.save
-      redirect_to templates_path
+      redirect_to edit_template_path(@template.id), notice: 'Template iniciado com sucesso!'
     else
       render :new, status: :unprocessable_entity
     end
@@ -49,6 +46,7 @@ class TemplatesController < ApplicationController
   # Não retorna valor.
   # Não possui efeitos colaterais além de renderizar a página com layout "home".
   def edit
+    @template = Template.find(params[:id])
     render layout: "home"
   end
 
@@ -56,63 +54,32 @@ class TemplatesController < ApplicationController
   #
   # Não retorna valor explícito.
   # Pode ter efeitos colaterais: atualiza um registro de Template no banco de dados ou redireciona para a página de listagem com status de erro.
-  def update 
-    process_alternatives
+  def update
+    if template_params[:name] == ""
+      redirect_to edit_template_path(params[:id]), alert: "Nome do template em branco!"
+      return
+    end
+
+    @template = Template.find(params[:id])
     if @template.update(template_params)
-      redirect_to templates_path
+      redirect_to edit_template_path(@template.id), notice: 'Template atualizado com sucesso!'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
-  # Método para deletar um template existente
-  #
-  # Não retorna valor explícito.
-  # Pode ter efeitos colaterais: deleta um registro de Template do banco de dados e redireciona para a página de listagem.
-  def destroy 
-    @template.destroy
-    redirect_to templates_path, notice: 'Template was successfully deleted.'    
+  def destroy
+    id = params[:id].to_i
+    template = Template.find(id)
+    template.update({ hidden: true })
+
+    redirect_to templates_path, notice: 'Template deletado com sucesso!'
   end
 
   private
 
   # Define os parâmetros permitidos para a criação e atualização de templates
   def template_params
-    params.require(:template).permit(
-      :name, 
-      template_questions_attributes: [:id, :title, :question_type, :content, :_destroy, alternatives: [:content]]
-    )
+    params.require(:template).permit(:name)
   end
-
-  # Configura o template a ser utilizado para as ações que necessitam de um template específico
-  def set_template
-    @template = Template.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    redirect_to templates_path
-  end
-
-  # Processa as alternativas das perguntas do template para salvá-las em formato JSON, se aplicável
-  #
-  # Não retorna valor explícito.
-  # Pode ter efeitos colaterais: modifica os parâmetros da requisição para incluir as alternativas em formato JSON.
-  def process_alternatives
-    return unless params[:template][:template_questions_attributes]
-  
-    params[:template][:template_questions_attributes].each do |key, question|
-      if question[:question_type] == 'radio' || question[:question_type] == 'checkbox'
-        if question[:alternatives].present?
-          alternatives = []
-          question[:alternatives].each do |key, alt| 
-            alternatives << alt[:content]
-          end
-          question[:content] = alternatives.to_json
-        else
-          question[:content] = '[]' # Array JSON vazio se não houver alternativas
-        end
-      else
-        params[:template][:template_questions_attributes][key][:content] = question[:content]
-      end
-    end
-  end
-  
 end

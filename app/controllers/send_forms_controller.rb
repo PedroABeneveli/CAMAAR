@@ -18,28 +18,32 @@ class SendFormsController < ApplicationController
   # Não retorna valor explícito.
   # Pode ter efeitos colaterais: criação de novos registros de FormRequest no banco de dados.
   def create
-    puts params  # Mostra os parâmetros recebidos no console para depuração
+    template = Template.find(params[:template].to_i)
 
-    template = Template.find(params[:templates].to_i)  # Encontra o template selecionado pelos parâmetros
+    num_selected = 0
+    params.each do |key, value|
+      if is_study_class_selected(key, value)
+        num_selected += 1
 
-    params.each do |k, v|
-      if k.starts_with?("study_class_") && v == "1"  # Verifica se o parâmetro indica uma classe selecionada
-        sc_id = k[12..].to_i  # Extrai o ID da classe de estudo a partir do nome do parâmetro
-        puts sc_id  # Mostra o ID da classe no console para depuração
-
-        sc = StudyClass.find(sc_id)  # Encontra a classe de estudo pelo ID
-        puts sc  # Mostra a classe de estudo no console para depuração
-
-        sc.users.each do |u|
-          if FormRequest.find_by(user_id: u.id, study_class_id: sc.id).nil?
-            FormRequest.create(template: template, study_class: sc, user: u)
-          end
-        end
-
-        if sc.docente.present? && FormRequest.find_by(user_id: sc.docente.id, study_class_id: sc.id).nil?
-          FormRequest.create(template: template, study_class: sc, user: sc.docente)
-        end
+        study_class = param_value_to_study_class(key)
+        study_class.send_form_to_users(template)
       end
     end
+
+    if num_selected == 0
+      redirect_to send_forms_path, alert: "Nenhuma turma selecionada!"
+    else
+      redirect_to gerenciamento_path, notice: "Formulário enviado com sucesso!"
+    end
+  end
+
+  private
+
+  def param_value_to_study_class(key)
+    StudyClass.find(key[12..].to_i)
+  end
+
+  def is_study_class_selected(key, value)
+    key.starts_with?("study_class_") && value == "1"
   end
 end

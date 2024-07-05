@@ -77,4 +77,6 @@ group :test do
   gem 'rails-controller-testing'
 end
 
+gem "rubycritic", require: false
+
 gem 'json', '~> 2.7', '>= 2.7.2'

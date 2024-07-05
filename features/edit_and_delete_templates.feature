@@ -4,27 +4,36 @@ Feature: Edit/Delete Template
   So that I can organize the existing templates
 
   Background: Starting on the templates management page
-    Given I am on the Gerenciamento page
+    Given I am logged in as the admin
+    And I have started template "Template #1"
+    And I am on the Edit Templates page
 
-  Scenario: Successful edit (happy path)
-    When I follow "Editar" within the template list
-    And I fill in "Nome do template" with "Novo nome do template"
-    And I press "Salvar"
-    Then I should be on the Gerenciamento page
-    And I should see "Template updated successfully"
-    And the already created forms should not be affected
+  Scenario: Edit name (happy path)
+    When I fill in "template_name" with "Template #2"
+    And I press "save_template_name"
+    Then I should be on the Edit Templates page
+    And I should have a template with name "Template #2"
+    And I should see "Template atualizado com sucesso!"
+
+  Scenario: Add question (happy path)
+    When I press "add_question_button"
+    And I fill in "Q1." with "Q1?"
+    And I press "save_question_1"
+    Then I should be on the Edit Templates page
+    And I should have a template with name "Template #1"
+    And I should have a template with question "Q1?"
+    And I should see "Template atualizado com sucesso!"
 
   Scenario: Successful deletion (happy path)
-    When I follow "Deletar" within the template list
-    And I confirm the deletion
-    Then I should be on the Gerenciamento page
-    And I should see "template deleted successfully"
-    And the already created forms should not be affected
+    Given I am on the Templates page
+    When I press "delete_template_1"
+    Then I should be on the Templates page
+    And I should see "Template deletado com sucesso!"
+    And I should have a hidden template "Template #1"
 
-  Scenario: Edit failure due to validation errors (sad path)
-    When I follow "Editar" within the template list
-    And I fill in "Nome do template" with ""
-    And I press "Salvar"
-    Then I should be on the edit template page
-    And I should see "Preencha os campos obrigatórios"
-    And the template should not be updated
+  Scenario: Edit with empty field (sad path)
+    When I fill in "template_name" with ""
+    And I press "save_template_name"
+    Then I should be on the Edit Templates page
+    And I should have a template with name "Template #1"
+    And I should see "Nome do template em branco!"

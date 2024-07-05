@@ -10,4 +10,8 @@ class Template < ApplicationRecord
   # Validações
   #   - Valida a presença do nome do modelo de formulário, garantindo que não seja vazio.
   validates :name, presence: true
+
+  def self.all_visible
+    return Template.where(hidden: false)
+  end
 end
