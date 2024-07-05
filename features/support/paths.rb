@@ -28,6 +28,9 @@ module NavigationHelpers
     when /^the Templates\s?page$/
       '/gerenciamento/templates'
 
+    when /^the Send Forms\s?page$/
+      '/gerenciamento/send_forms'
+
     when /^the Create Templates\s?page$/
       '/gerenciamento/templates/new'
 
