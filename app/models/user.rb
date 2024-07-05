@@ -15,6 +15,10 @@ class User < ApplicationRecord
   end
 
   def self.find_for_database_authentication(warden_conditions)
+    # Não criamos testes para esse método, pois é uma funcionalidade 
+    # própria do Devise para permitir autenticação tanto com e-mail 
+    # quanto com matrícula
+    
     conditions = warden_conditions.dup
     if (login = conditions.delete(:login))
       where(conditions.to_h).where(["matricula = :value OR lower(email) = :value", { :value => login.downcase }]).first
