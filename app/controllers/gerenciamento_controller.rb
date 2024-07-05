@@ -34,12 +34,12 @@ class GerenciamentoController < ApplicationController
       turma = StudyClass.find_by code: materia["code"], classCode: materia["classCode"], semester: materia["semester"]
 
       materia["dicente"].each do |aluno|
-        new_data |= add_student(aluno, turma)
-        new_users |= new_data
+        new_users |= add_student(aluno, turma)
+        new_data |= new_users
       end
 
-      new_data |= add_teacher(materia["docente"], turma)
-      new_users |= new_data
+      new_users |= add_teacher(materia["docente"], turma)
+      new_data |= new_users
     end
 
     [new_data, new_users]
