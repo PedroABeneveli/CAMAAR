@@ -9,7 +9,7 @@ class GerenciamentoController < ApplicationController
     hash_class = JSON.parse(File.read("classes.json"))
     hash_members = JSON.parse(File.read("class_members.json"))
 
-    if !(check_class_json hash_class) or !(check_class_members_json hash_members)
+    if !(valid_class_json? hash_class) or !(valid_class_members_json? hash_members)
       flash[:alert] = "Dados inválidos"
     else
       new_data, new_users = add_import_data hash_class, hash_members
@@ -90,7 +90,7 @@ class GerenciamentoController < ApplicationController
     end
   end
 
-  def check_class_members_json(json)
+  def valid_class_members_json?(json)
     if json.respond_to? :keys
       false
     else
@@ -104,7 +104,7 @@ class GerenciamentoController < ApplicationController
     end
   end
 
-  def check_class_json(json)
+  def valid_class_json?(json)
     # sao JSONs de lista, nao eh um objeto direto
     if json.respond_to? :keys
       false
@@ -152,7 +152,7 @@ class GerenciamentoController < ApplicationController
         end
       end
 
-      if invalid_teacher(obj["docente"])
+      if invalid_teacher?(obj["docente"])
         return false
       end
 
@@ -166,7 +166,7 @@ class GerenciamentoController < ApplicationController
     (not aluno.respond_to? :keys) or aluno.keys.sort != keys_dicente
   end
 
-  def invalid_teacher(docente)
+  def invalid_teacher?(docente)
     keys_docente = ["nome", "departamento", "formacao", "usuario", "email", "ocupacao"].sort
 
     (not docente.respond_to? :keys) or docente.keys.sort != keys_docente
