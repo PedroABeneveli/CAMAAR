@@ -7,12 +7,51 @@ RSpec.describe GerenciamentoController, type: :controller do
     sign_in user
   end
 
+  it "doesn't allow non-admins to access" do
+    student = FactoryBot.create(:user, matricula: "976543", email: "user@email.com")
+    sign_in student
+
+    get :index
+
+    expect(response).to redirect_to(root_path)
+  end
+
+  it "warns that the non-admin cant't access this page" do
+    student = FactoryBot.create(:user, matricula: "976543", email: "user@email.com")
+    sign_in student
+
+    get :index
+
+    expect(flash[:alert]).to eq "Usuário não tem permissão para acessar!"
+  end
+
+  it 'renders index' do
+    expect(response).to have_http_status(:ok)
+    get :index
+  end
+
   describe 'import data' do
     describe 'invalid JSON' do
       it "warns because it's missing fields (classes.json)" do
         # fazendo um mock da leitura do arquivo pra eu conseguir testar com jsons especificos
         json_classes = <<-EOF
           [ {"code": "CIC0000", "class": { "classCode": "TA", "semester": "2024.1", "time": "25M34"} } ]
+        EOF
+        filepath_classes = "classes.json"
+        allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
+
+        json_members, filepath_members = valid_members
+        allow(File).to receive(:read).with(filepath_members).and_return(json_members)
+
+        put :import
+
+        # espera que tenha um aviso
+        expect(flash[:alert]).to be_present
+      end
+
+      it "warns because it's missing fields in the class data (classes.json)" do
+        json_classes = <<-EOF
+          [ {"code": "CIC0000", "name": "TESTE", "class": { "classCode": "TA", "semester": "2024.1"} } ]
         EOF
         filepath_classes = "classes.json"
         allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
@@ -60,6 +99,107 @@ RSpec.describe GerenciamentoController, type: :controller do
               "docente": { 
                 "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "fulano@email.com", "ocupacao": "docente" } 
               } ]
+        EOF
+        filepath_members = "class_members.json"
+        allow(File).to receive(:read).with(filepath_members).and_return(json_members)
+
+        put :import
+
+        expect(flash[:alert]).to be_present
+      end
+
+      it "warns because it's missing fields from the teacher" do
+        json_classes, filepath_classes = valid_classes
+        allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
+
+        json_members = <<-EOF
+          [ { "code": "CIC0000", "classCode": "TA", "semester": "2024.1", 
+              "dicente": [{
+                "nome": "Silva",
+                "curso": "CIÊNCIA DA COMPUTAÇÃO/CIC",
+                "matricula": "54321",
+                "usuario": "54321",
+                "formacao": "graduando",
+                "ocupacao": "dicente",
+                "email": "silva@email.com"
+              }],
+              "docente": { 
+                "nome": "FULANO DE CICLANO", "formacao": "DOUTORADO", "usuario": "12345", "email": "fulano@email.com", "ocupacao": "docente" 
+              } 
+            } 
+          ]
+        EOF
+        filepath_members = "class_members.json"
+        allow(File).to receive(:read).with(filepath_members).and_return(json_members)
+
+        put :import
+
+        expect(flash[:alert]).to be_present
+      end
+
+      it "warns because the JSON isn't a list (classes.json)" do
+        json_classes = <<-EOF
+          {"code": "CIC0000", "class": { "classCode": "TA", "semester": "2024.1", "time": "25M34"} }
+        EOF
+        filepath_classes = "classes.json"
+        allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
+
+        json_members, filepath_members = valid_members
+        allow(File).to receive(:read).with(filepath_members).and_return(json_members)
+
+        put :import
+
+        expect(flash[:alert]).to be_present
+      end
+
+      it "warns because the JSON isn't a list (class_member.json)" do
+        json_classes, filepath_classes = valid_classes
+        allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
+
+        json_members = <<-EOF
+          { "code": "CIC0000", "classCode": "TA", "semester": "2024.1", 
+            "dicente": [{
+              "nome": "Silva",
+              "curso": "CIÊNCIA DA COMPUTAÇÃO/CIC",
+              "matricula": "54321",
+              "usuario": "54321",
+              "formacao": "graduando",
+              "ocupacao": "dicente",
+              "email": "silva@email.com"
+            }],
+            "docente": { 
+              "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "fulano@email.com", "ocupacao": "docente" 
+            } 
+          } 
+        EOF
+        filepath_members = "class_members.json"
+        allow(File).to receive(:read).with(filepath_members).and_return(json_members)
+
+        put :import
+
+        expect(flash[:alert]).to be_present
+      end
+
+      it "warns because the 'discente' field in the JSON isn't a list (class_members.json)" do
+        json_classes, filepath_classes = valid_classes
+        allow(File).to receive(:read).with(filepath_classes).and_return(json_classes)
+
+        json_members = <<-EOF
+          [ { "code": "CIC0000", "classCode": "TA", "semester": "2024.1", 
+              "dicente": {
+                "nome": "Silva",
+                "curso": "CIÊNCIA DA COMPUTAÇÃO/CIC",
+                "matricula": "54321",
+                "usuario": "54321",
+                "formacao": "graduando",
+                "ocupacao": "dicente",
+                "email": "silva@email.com"
+              },
+              "docente": { 
+                "nome": "FULANO DE CICLANO", "departamento": "DEPTO CIÊNCIAS DA COMPUTAÇÃO", "formacao": "DOUTORADO", "usuario": "12345", "email": "fulano@email.com", "ocupacao": "docente" 
+              } 
+            } 
+          ]
         EOF
         filepath_members = "class_members.json"
         allow(File).to receive(:read).with(filepath_members).and_return(json_members)
