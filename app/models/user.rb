@@ -54,6 +54,18 @@ class User < ApplicationRecord
   # Método para permitir a criação de usuários sem a necessidade de preencher o campo de senha.
   attr_accessor :skip_password_validation
 
+  # Adiciona um novo aluno ao banco de dados
+  # Argumentos: 
+  #   - hash: Hashmap com as seguintes informações do aluno:
+  #     - nome
+  #     - curso
+  #     - matricula
+  #     - usuario
+  #     - formacao
+  #     - ocupacao
+  #     - email 
+  # Retorna: 
+  #   - o Estudante criado
   def self.add_student(hash)
     pessoa = User.new nome: hash["nome"], curso: hash["curso"], matricula: hash["matricula"], usuario: hash["usuario"], formacao: hash["formacao"], ocupacao: hash["ocupacao"], email: hash["email"]
     pessoa.skip_password_validation = true
@@ -63,6 +75,17 @@ class User < ApplicationRecord
     pessoa
   end
 
+  # Adiciona um novo professor ao banco de dados
+  # Argumentos: 
+  #   - Hashmap com as seguintes informações do professor:
+  #     - nome
+  #     - departamento 
+  #     - formação
+  #     - usuario 
+  #     - email 
+  #     - ocupacao 
+  # Retorna:
+  #   - o Professor criado
   def self.add_teacher(hash)
     pessoa = User.new nome: hash["nome"], departamento: hash["departamento"], formacao: hash["formacao"], matricula: hash["usuario"], usuario: hash["usuario"], email: hash["email"], ocupacao: hash["ocupacao"]
     pessoa.skip_password_validation = true
