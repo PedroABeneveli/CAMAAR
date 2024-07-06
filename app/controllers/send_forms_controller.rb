@@ -1,9 +1,11 @@
+# Controlador responsável pelo tratamento das requisições referentes 
+# à view de envio de formulários para os alunos
 class SendFormsController < ApplicationController
   # Método para renderizar a página de envio de formulários
   #
   # Não recebe argumentos.
   # Não retorna valor.
-  # Não possui efeitos colaterais além de renderizar a página com layout "home".
+  # Tem como efeito colateral a renderização da página de envio de formulários
   def index
     @templates = Template.all
     @study_classes = StudyClass.all
@@ -38,6 +40,8 @@ class SendFormsController < ApplicationController
   end
 
   private
+
+  # Métodos para facilitar a compreensão do código com minemônicos
 
   def param_value_to_study_class(key)
     StudyClass.find(key[12..].to_i)
