@@ -52,7 +52,7 @@ class TemplatesController < ApplicationController
   # Método para editar um template existente
   #
   # Argumentos:
-  # - template_params: Um hash contendo os parâmetros da requisição HTTP com acesso externo permitido.
+  # - params: Um hash contendo os parâmetros da requisição HTTP com acesso externo permitido.
   # Não retorna valor.
   # Tem como efeitos colaterais a renderização da página 
   # de edição de template com o template selecionado.
